@@ -12,15 +12,51 @@
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html,
+body {
+  height: 100%;
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-sans), Arial, Helvetica, sans-serif;
+}
+
+.dot-pattern {
+  background-image: radial-gradient(circle, #e7e8ec 0.75px, transparent 0.8px);
+  background-size: 18px 18px;
+}
+
+.dot-cluster {
+  background-image: radial-gradient(circle, rgba(142, 180, 255, 0.72) 1.6px, transparent 1.7px);
+  background-size: 10px 10px;
+  opacity: 0.75;
+}
+
+.dot-cluster-left {
+  -webkit-mask-image: radial-gradient(circle at center, #000 0%, #000 28%, transparent 72%);
+  mask-image: radial-gradient(circle at center, #000 0%, #000 28%, transparent 72%);
+}
+
+.dot-cluster-right {
+  -webkit-mask-image: radial-gradient(circle at center, #000 0%, #000 24%, transparent 76%);
+  mask-image: radial-gradient(circle at center, #000 0%, #000 24%, transparent 76%);
+}
+
+::-webkit-scrollbar {
+  width: 7px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #a9a5a1;
+  border-radius: 999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #8a8682;
 }
