@@ -1,12 +1,15 @@
 "use client";
 
 import { useState } from "react";
-import { Bot, ChevronDown, ChevronRight, Sparkles, Zap } from "lucide-react";
+import { ChevronDown, ChevronRight } from "lucide-react";
+import Image from "next/image";
+import quartzAvatar from "@/app/Untitled.png";
 import type { Skill, ToolCall } from "@/lib/backend";
 
 interface ThinkingPanelProps {
   toolCalls: ToolCall[];
   message: string | null;
+  userPrompt: string | null;
   isThinking: boolean;
   skills: Skill[];
   activeSkillIds: string[];
@@ -16,67 +19,88 @@ interface ThinkingPanelProps {
 export default function ThinkingPanel({
   toolCalls,
   message,
+  userPrompt,
   isThinking,
   skills,
   activeSkillIds,
   onSkillClick,
 }: ThinkingPanelProps) {
-  const showEmptyState = !toolCalls.length && !message && !isThinking;
+  const showEmptyState =
+    !toolCalls.length && !message && !isThinking && !userPrompt;
   const activeSkills = activeSkillIds
     .map((id) => skills.find((s) => s.id === id))
     .filter((s): s is Skill => s != null);
 
   return (
-    <div className="mx-auto flex w-full max-w-[980px] flex-col gap-4 px-8 py-8">
+    <div className="mx-auto flex w-full max-w-[780px] flex-col px-10 py-12">
       {showEmptyState ? (
-        <div className="rounded-xl border border-zinc-100 bg-zinc-50/70 px-5 py-6 text-[13px] text-zinc-400">
+        <p className="text-[13px] italic text-zinc-400">
           No activity yet. Send a prompt to start a QuantAI session.
+        </p>
+      ) : null}
+
+      {userPrompt ? (
+        <div className="mb-8 flex items-start gap-3">
+          <Image
+            src={quartzAvatar}
+            alt="Quartz"
+            width={22}
+            height={22}
+            className="mt-[2px] rounded-full"
+          />
+          <div className="flex flex-col gap-1">
+            <span className="text-[11px] font-semibold text-zinc-900">
+              Quartz
+            </span>
+            <p className="whitespace-pre-wrap text-[14px] leading-[1.55] text-zinc-700">
+              {userPrompt}
+            </p>
+          </div>
         </div>
       ) : null}
 
       {activeSkills.length > 0 ? (
-        <div className="flex flex-wrap items-center gap-2">
-          <span className="flex items-center gap-1 text-[10.5px] font-semibold uppercase tracking-[0.08em] text-zinc-400">
-            <Sparkles size={10} className="text-amber-400" />
-            Skills in use
+        <div className="mb-6 flex flex-wrap items-center gap-x-2 text-[11px] text-zinc-400">
+          <span className="font-mono uppercase tracking-[0.09em] text-zinc-300">
+            skills
           </span>
-          {activeSkills.map((skill) => (
-            <button
-              key={skill.id}
-              onClick={() => onSkillClick(skill.id)}
-              className="inline-flex items-center gap-1.5 rounded-full border border-zinc-200 bg-zinc-50 px-2.5 py-0.5 text-[11px] text-zinc-600 transition-colors hover:border-zinc-300 hover:bg-white hover:text-zinc-900"
-            >
-              <span className="inline-block h-1.5 w-1.5 animate-pulse rounded-full bg-green-400" />
-              {skill.title}
-            </button>
+          {activeSkills.map((skill, idx) => (
+            <span key={skill.id} className="flex items-center gap-2">
+              {idx > 0 ? <span className="text-zinc-300">·</span> : null}
+              <button
+                onClick={() => onSkillClick(skill.id)}
+                className="text-zinc-500 transition-colors hover:text-zinc-900"
+              >
+                {skill.title}
+              </button>
+            </span>
           ))}
         </div>
       ) : null}
 
-      {toolCalls.map((toolCall) => (
-        <ToolCallRow key={toolCall.id} call={toolCall} />
-      ))}
+      {toolCalls.length > 0 || isThinking ? (
+        <div className="relative border-l border-zinc-100 pl-5">
+          {toolCalls.map((call) => (
+            <ToolCallLine key={call.id} call={call} />
+          ))}
 
-      {isThinking ? (
-        <div className="flex items-center gap-3 px-4 py-3" aria-live="polite">
-          <div className="flex gap-1">
-            <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-zinc-400 [animation-delay:0ms]" />
-            <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-zinc-400 [animation-delay:150ms]" />
-            <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-zinc-400 [animation-delay:300ms]" />
-          </div>
-          <span className="text-xs text-zinc-400">Processing...</span>
+          {isThinking && toolCalls.every((c) => c.status === "complete") ? (
+            <div className="relative py-2">
+              <Dot running />
+              <span className="shimmer-text text-[12.5px] font-medium">
+                Thinking
+              </span>
+            </div>
+          ) : null}
         </div>
       ) : null}
 
       {message ? (
-        <div className="mt-2 flex gap-3">
-          <div
-            className="mt-0.5 flex h-7 w-7 flex-shrink-0 items-center justify-center rounded-full bg-zinc-100"
-            aria-label="QuantAI Assistant"
-          >
-            <Bot size={14} className="text-zinc-600" />
-          </div>
-          <div className="whitespace-pre-wrap rounded-[14px] border border-zinc-200 bg-white px-5 py-4 text-[14px] leading-6 text-zinc-700 shadow-sm">
+        <div className="mt-10">
+          <p className="mb-3 font-mono text-[10.5px] uppercase tracking-[0.09em] text-zinc-300">
+            answer
+          </p>
+          <div className="whitespace-pre-wrap text-[14.5px] leading-[1.65] text-zinc-800">
             {message}
           </div>
         </div>
@@ -85,59 +109,111 @@ export default function ThinkingPanel({
   );
 }
 
-function ToolCallRow({ call }: { call: ToolCall }) {
+function ToolCallLine({ call }: { call: ToolCall }) {
   const [expanded, setExpanded] = useState(false);
+  const running = call.status === "running";
+  const displayName = formatToolName(call.toolName);
+  const inputPreview = previewInput(call.input);
 
   return (
-    <div className="overflow-hidden rounded-[12px] border border-zinc-200 bg-white shadow-sm">
+    <div className="relative">
+      <Dot running={running} />
       <button
         onClick={() => setExpanded(!expanded)}
         aria-expanded={expanded}
-        aria-label={`Tool call: ${formatToolName(call.toolName)}`}
-        className="flex w-full items-center gap-3 px-4 py-3 transition-colors hover:bg-zinc-50"
+        className="group flex w-full items-baseline gap-2 py-2 text-left"
       >
         {expanded ? (
-          <ChevronDown size={14} className="text-zinc-400" />
+          <ChevronDown
+            size={11}
+            strokeWidth={2}
+            className="translate-y-[1px] text-zinc-300 transition-colors group-hover:text-zinc-500"
+          />
         ) : (
-          <ChevronRight size={14} className="text-zinc-400" />
+          <ChevronRight
+            size={11}
+            strokeWidth={2}
+            className="translate-y-[1px] text-zinc-300 transition-colors group-hover:text-zinc-500"
+          />
         )}
-        <Zap size={14} className="text-amber-500" />
-        <span className="text-sm font-medium text-zinc-700">
-          {formatToolName(call.toolName)}
+        <span
+          className={`text-[12.5px] font-medium ${
+            running ? "shimmer-text" : "text-zinc-700"
+          }`}
+        >
+          {displayName}
         </span>
-        {call.status === "running" ? (
-          <span className="ml-auto flex gap-0.5">
-            <span className="h-1 w-1 animate-bounce rounded-full bg-zinc-400 [animation-delay:0ms]" />
-            <span className="h-1 w-1 animate-bounce rounded-full bg-zinc-400 [animation-delay:150ms]" />
-            <span className="h-1 w-1 animate-bounce rounded-full bg-zinc-400 [animation-delay:300ms]" />
+        {inputPreview ? (
+          <span className="truncate font-mono text-[11px] text-zinc-400">
+            {inputPreview}
           </span>
-        ) : (
-          <span className="ml-auto font-mono text-xs text-zinc-400">
-            {call.durationMs}ms
-          </span>
-        )}
+        ) : null}
+        <span className="ml-auto shrink-0 font-mono text-[10.5px] text-zinc-400">
+          {running ? "running" : `${call.durationMs}ms`}
+        </span>
       </button>
 
       {expanded ? (
-        <div className="space-y-3 border-t border-zinc-100 bg-zinc-50 px-4 py-3">
-          <div>
-            <span className="text-xs text-zinc-400">Input:</span>
-            <pre className="mt-1 overflow-x-auto rounded-md border border-zinc-100 bg-white p-2 font-mono text-xs text-zinc-600">
-              <code>{JSON.stringify(call.input, null, 2)}</code>
-            </pre>
-          </div>
-          <div>
-            <span className="text-xs text-zinc-400">Output:</span>
-            <pre className="mt-1 overflow-x-auto rounded-md border border-zinc-100 bg-white p-2 font-mono text-xs text-zinc-600">
-              <code>{call.output}</code>
-            </pre>
-          </div>
+        <div className="space-y-3 pb-3 pl-5 pt-1">
+          {Object.keys(call.input).length > 0 ? (
+            <Block label="Input">
+              <pre className="whitespace-pre-wrap font-mono text-[11.5px] leading-[1.55] text-zinc-700">
+                {formatInput(call.input)}
+              </pre>
+            </Block>
+          ) : null}
+          {call.output ? (
+            <Block label="Output">
+              <pre className="max-h-[280px] overflow-auto whitespace-pre-wrap font-mono text-[11.5px] leading-[1.55] text-zinc-500">
+                {call.output}
+              </pre>
+            </Block>
+          ) : null}
         </div>
       ) : null}
     </div>
   );
 }
 
+function Dot({ running }: { running: boolean }) {
+  return (
+    <span
+      aria-hidden="true"
+      className={`absolute left-[-23px] top-[13px] h-[6px] w-[6px] rounded-full ${
+        running ? "animate-pulse bg-zinc-900" : "bg-zinc-300"
+      }`}
+    />
+  );
+}
+
+function Block({ label, children }: { label: string; children: React.ReactNode }) {
+  return (
+    <div>
+      <p className="mb-1 font-mono text-[10px] uppercase tracking-[0.09em] text-zinc-300">
+        {label}
+      </p>
+      {children}
+    </div>
+  );
+}
+
 function formatToolName(name: string): string {
-  return name.replace(/_/g, " ").replace(/\b\w/g, (character) => character.toUpperCase());
+  return name.replace(/_/g, " ");
+}
+
+function previewInput(input: Record<string, unknown>): string {
+  if (!input || Object.keys(input).length === 0) return "";
+  const sql = input.sql;
+  if (typeof sql === "string") return sql.replace(/\s+/g, " ").slice(0, 60);
+  const query = input.query;
+  if (typeof query === "string") return query.slice(0, 60);
+  const raw = input._raw;
+  if (typeof raw === "string") return raw.slice(0, 60);
+  return "";
+}
+
+function formatInput(input: Record<string, unknown>): string {
+  const sql = input.sql;
+  if (typeof sql === "string") return sql;
+  return JSON.stringify(input, null, 2);
 }

@@ -26,7 +26,7 @@ export default function TaskPlan({ tasks }: TaskPlanProps) {
               task.status === "complete"
                 ? "text-zinc-400"
                 : task.status === "running"
-                ? "font-medium text-zinc-900"
+                ? "shimmer-text font-medium"
                 : "text-zinc-600"
             }`}
           >

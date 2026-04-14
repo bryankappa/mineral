@@ -19,6 +19,7 @@ interface SessionDetailProps {
   session: Session;
   toolCalls: ToolCall[];
   responseMessage: string | null;
+  userPrompt: string | null;
   isThinking: boolean;
   onSendMessage: (prompt: string) => void;
   skills: Skill[];
@@ -33,6 +34,7 @@ export default function SessionDetail({
   session,
   toolCalls,
   responseMessage,
+  userPrompt,
   isThinking,
   onSendMessage,
   skills,
@@ -101,16 +103,28 @@ export default function SessionDetail({
       </header>
 
       <div className="flex flex-1 overflow-hidden">
-        <div className="flex flex-1 flex-col overflow-y-auto">
-          <ThinkingPanel
-            toolCalls={toolCalls}
-            message={responseMessage}
-            isThinking={isThinking}
-            skills={skills}
-            activeSkillIds={activeSkillIds}
-            onSkillClick={onSkillClick}
-          />
-          <div className="mt-auto" />
+        <div className="flex min-w-0 flex-1 flex-col">
+          <div className="flex-1 overflow-y-auto">
+            <ThinkingPanel
+              toolCalls={toolCalls}
+              message={responseMessage}
+              userPrompt={userPrompt}
+              isThinking={isThinking}
+              skills={skills}
+              activeSkillIds={activeSkillIds}
+              onSkillClick={onSkillClick}
+            />
+          </div>
+
+          <div className="shrink-0 bg-white">
+            <div className="mx-auto w-full max-w-[780px] px-10 pb-6 pt-2">
+              <ChatInput
+                onSubmit={onSendMessage}
+                disabled={isThinking}
+                maxWidthClass=""
+              />
+            </div>
+          </div>
         </div>
 
         {panelOpen ? (
@@ -131,14 +145,6 @@ export default function SessionDetail({
             </div>
           </aside>
         ) : null}
-      </div>
-
-      <div className="flex justify-center border-t border-zinc-100 bg-white px-6 py-4">
-        <ChatInput
-          onSubmit={onSendMessage}
-          disabled={isThinking}
-          maxWidthClass="max-w-[860px]"
-        />
       </div>
     </div>
   );

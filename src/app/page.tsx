@@ -16,6 +16,7 @@ export default function Home() {
   const [isThinking, setIsThinking] = useState(false);
   const [toolCalls, setToolCalls] = useState<ToolCall[]>([]);
   const [responseMessage, setResponseMessage] = useState<string | null>(null);
+  const [userPrompt, setUserPrompt] = useState<string | null>(null);
   const [skills, setSkills] = useState<Skill[]>([]);
   const [activeSkillIds, setActiveSkillIds] = useState<string[]>([]);
   const [showSkills, setShowSkills] = useState(false);
@@ -46,6 +47,7 @@ export default function Home() {
     setSelectedSessionId(null);
     setToolCalls([]);
     setResponseMessage(null);
+    setUserPrompt(null);
     setActiveSkillIds([]);
     setTasks([]);
     setIsThinking(false);
@@ -74,6 +76,7 @@ export default function Home() {
       setIsThinking(true);
       setToolCalls([]);
       setResponseMessage(null);
+      setUserPrompt(prompt);
       setActiveSkillIds([]);
       setTasks([]);
 
@@ -150,6 +153,7 @@ export default function Home() {
           session={selectedSession}
           toolCalls={toolCalls}
           responseMessage={responseMessage}
+          userPrompt={userPrompt}
           isThinking={isThinking}
           onSendMessage={handleSendMessage}
           skills={skills}

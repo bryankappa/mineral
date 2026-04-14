@@ -46,6 +46,37 @@ body {
   mask-image: radial-gradient(circle at center, #000 0%, #000 22%, transparent 72%);
 }
 
+/* ──────────────────────────────────────────────────────────────────────────
+   Shimmer — a chroma sweep across text to indicate "work in progress".
+   Used on running tool-call names and the currently-executing TaskPlan row.
+   A soft gray base with a deeper zinc highlight traveling left→right.
+   ────────────────────────────────────────────────────────────────────────── */
+@keyframes shimmer-sweep {
+  0% {
+    background-position: 180% 0;
+  }
+  100% {
+    background-position: -80% 0;
+  }
+}
+
+.shimmer-text {
+  background-image: linear-gradient(
+    110deg,
+    #9ca3af 0%,
+    #9ca3af 38%,
+    #0f172a 50%,
+    #9ca3af 62%,
+    #9ca3af 100%
+  );
+  background-size: 220% 100%;
+  background-repeat: no-repeat;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: shimmer-sweep 2.4s cubic-bezier(0.65, 0, 0.35, 1) infinite;
+}
+
 ::-webkit-scrollbar {
   width: 6px;
 }
