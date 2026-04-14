@@ -23,37 +23,37 @@ export default function SessionDetail({
 }: SessionDetailProps) {
   return (
     <div className="flex h-screen flex-1 flex-col bg-white">
-      <header className="flex items-center justify-between border-b border-zinc-100 px-6 py-3.5">
-        <div className="flex items-center gap-2.5">
-          <MessageSquare size={15} className="text-zinc-400" />
-          <h1 className="max-w-lg truncate text-[14px] font-semibold text-zinc-900">
+      <header className="flex items-center justify-between border-b border-zinc-100 px-6 py-3">
+        <div className="flex items-center gap-2">
+          <MessageSquare size={14} className="text-zinc-300" />
+          <h1 className="max-w-lg truncate text-[13.5px] font-semibold text-zinc-800">
             {session.title}
           </h1>
         </div>
 
-        <div className="flex items-center gap-1">
+        <div className="flex items-center gap-0.5">
           <button
-            className="rounded-lg p-2 text-zinc-400 transition-colors hover:bg-zinc-50"
+            className="rounded-lg p-1.5 text-zinc-400 transition-colors hover:bg-zinc-50 hover:text-zinc-600"
             aria-label="Share"
           >
-            <Share2 size={15} />
+            <Share2 size={14} />
           </button>
           <button
-            className="rounded-lg p-2 text-zinc-400 transition-colors hover:bg-zinc-50"
+            className="rounded-lg p-1.5 text-zinc-400 transition-colors hover:bg-zinc-50 hover:text-zinc-600"
             aria-label="Terminal"
           >
-            <Terminal size={15} />
+            <Terminal size={14} />
           </button>
           <button
-            className="rounded-lg p-2 text-zinc-400 transition-colors hover:bg-zinc-50"
+            className="rounded-lg p-1.5 text-zinc-400 transition-colors hover:bg-zinc-50 hover:text-zinc-600"
             aria-label="Export"
           >
-            <Upload size={15} />
+            <Upload size={14} />
           </button>
         </div>
       </header>
 
-      <div className="flex flex-1 overflow-hidden bg-white">
+      <div className="flex flex-1 overflow-hidden">
         <div className="flex flex-1 flex-col overflow-y-auto">
           <ThinkingPanel
             toolCalls={toolCalls}
@@ -63,43 +63,42 @@ export default function SessionDetail({
           <div className="mt-auto" />
         </div>
 
-        <aside className="hidden w-[270px] min-w-[270px] overflow-y-auto border-l border-zinc-100 bg-white px-5 py-5 lg:block">
-          <div className="space-y-4 text-[12px] text-zinc-500">
+        <aside className="hidden w-[256px] min-w-[256px] overflow-y-auto border-l border-zinc-100 bg-white px-5 py-5 lg:block">
+          <div className="space-y-4">
             <MetaRow
-              icon={<Bot size={14} className="mt-0.5 text-zinc-400" />}
+              icon={<Bot size={13} className="mt-px text-zinc-400" />}
               label="Status"
               value="Placeholder backend"
             />
             <MetaRow
-              icon={<Clock size={14} className="mt-0.5 text-zinc-400" />}
+              icon={<Clock size={13} className="mt-px text-zinc-400" />}
               label="Updated"
               value={session.age}
             />
             <MetaRow
-              icon={<span className="mt-[7px] inline-block h-2 w-2 rounded-full bg-zinc-300" />}
+              icon={<span className="mt-[5px] inline-block h-1.5 w-1.5 rounded-full bg-zinc-300" />}
               label="Model"
               value="claude-opus-4-5"
             />
             <MetaRow
-              icon={<span className="mt-[7px] inline-block h-2 w-2 rounded-full bg-amber-300" />}
+              icon={<span className="mt-[5px] inline-block h-1.5 w-1.5 rounded-full bg-amber-300" />}
               label="Session"
               value={session.subtitle || "Created locally"}
             />
           </div>
 
-          <div className="mt-6 rounded-[16px] border border-zinc-200 bg-zinc-50/70 px-4 py-4">
-            <p className="text-[11px] uppercase tracking-[0.08em] text-zinc-400">
+          <div className="mt-5 rounded-xl border border-zinc-100 bg-zinc-50 px-4 py-3.5">
+            <p className="text-[10.5px] font-semibold uppercase tracking-[0.08em] text-zinc-400">
               Backend
             </p>
-            <p className="mt-2 text-[12px] leading-5 text-zinc-500">
-              Replace <code>callQuantAIBackend(prompt)</code> in
-              <code> src/lib/backend.ts</code> when your Databricks endpoint is
-              ready.
+            <p className="mt-2 text-[12px] leading-[1.6] text-zinc-500">
+              Replace <code className="rounded bg-zinc-100 px-1 py-px text-[11px]">callQuantAIBackend(prompt)</code> in{" "}
+              <code className="rounded bg-zinc-100 px-1 py-px text-[11px]">src/lib/backend.ts</code> when your Databricks endpoint is ready.
             </p>
           </div>
 
-          <div className="mt-6">
-            <p className="text-[12px] font-semibold text-zinc-700">Tasks</p>
+          <div className="mt-5">
+            <p className="text-[11.5px] font-semibold text-zinc-700">Tasks</p>
             <p className="mt-2 text-[12px] text-zinc-400">No tasks reported yet.</p>
           </div>
         </aside>
@@ -126,13 +125,13 @@ function MetaRow({
   value: string;
 }) {
   return (
-    <div className="flex items-start gap-2">
+    <div className="flex items-start gap-2.5">
       {icon}
       <div>
-        <p className="text-[11px] uppercase tracking-[0.08em] text-zinc-400">
+        <p className="text-[10.5px] font-semibold uppercase tracking-[0.07em] text-zinc-400">
           {label}
         </p>
-        <p className="mt-1 text-zinc-600">{value}</p>
+        <p className="mt-0.5 text-[12.5px] text-zinc-600">{value}</p>
       </div>
     </div>
   );

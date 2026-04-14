@@ -20,7 +20,7 @@ export default function ThinkingPanel({
   return (
     <div className="mx-auto flex w-full max-w-[980px] flex-col gap-4 px-8 py-8">
       {showEmptyState ? (
-        <div className="rounded-[14px] border border-zinc-200 bg-zinc-50 px-5 py-6 text-sm text-zinc-400">
+        <div className="rounded-xl border border-zinc-100 bg-zinc-50/70 px-5 py-6 text-[13px] text-zinc-400">
           No activity yet. Send a prompt to start a QuantAI session.
         </div>
       ) : null}
@@ -77,9 +77,17 @@ function ToolCallRow({ call }: { call: ToolCall }) {
         <span className="text-sm font-medium text-zinc-700">
           {formatToolName(call.toolName)}
         </span>
-        <span className="ml-auto font-mono text-xs text-zinc-400">
-          {call.durationMs}ms
-        </span>
+        {call.status === "running" ? (
+          <span className="ml-auto flex gap-0.5">
+            <span className="h-1 w-1 animate-bounce rounded-full bg-zinc-400 [animation-delay:0ms]" />
+            <span className="h-1 w-1 animate-bounce rounded-full bg-zinc-400 [animation-delay:150ms]" />
+            <span className="h-1 w-1 animate-bounce rounded-full bg-zinc-400 [animation-delay:300ms]" />
+          </span>
+        ) : (
+          <span className="ml-auto font-mono text-xs text-zinc-400">
+            {call.durationMs}ms
+          </span>
+        )}
       </button>
 
       {expanded ? (

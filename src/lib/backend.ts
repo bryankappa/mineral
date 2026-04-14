@@ -1,9 +1,15 @@
 /**
- * QuantAI Backend Placeholder
+ * QuantAI Backend
  *
- * This function is the single integration point for the Databricks MLflow
- * responses agent. Replace the mock implementation below with a real
- * fetch/gRPC/SDK call when you're ready to wire in the backend.
+ * Calls /api/chat (the Next.js proxy route to Databricks) and consumes
+ * the SSE stream, dispatching events to the provided callbacks.
+ *
+ * SSE event vocabulary (emitted by the Python agent):
+ *   tool_call_start  → { id, toolName }
+ *   tool_call_delta  → { id, inputChunk }
+ *   tool_call_end    → { id, output, durationMs }
+ *   message_delta    → { text }
+ *   done             → {}
  */
 
 export interface ToolCall {
@@ -12,26 +18,109 @@ export interface ToolCall {
   input: Record<string, unknown>;
   output: string;
   durationMs: number;
+  status: "running" | "complete";
 }
 
-interface QuantAIResponse {
-  message: string;
-  toolCalls: ToolCall[];
+export interface StreamCallbacks {
+  onToolCallStart: (id: string, toolName: string) => void;
+  onToolCallDelta: (id: string, inputChunk: string) => void;
+  onToolCallEnd: (id: string, output: string, durationMs: number) => void;
+  onMessageDelta: (text: string) => void;
+  onDone: () => void;
+  onError: (error: Error) => void;
 }
 
-// ──────────────────────────────────────────────
-//  PLACEHOLDER — swap this out for the real call
-// ──────────────────────────────────────────────
 export async function callQuantAIBackend(
-  prompt: string
-): Promise<QuantAIResponse> {
-  void prompt;
+  prompt: string,
+  callbacks: StreamCallbacks
+): Promise<void> {
+  let response: Response;
+  try {
+    response = await fetch("/api/chat", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ prompt }),
+    });
+  } catch (err) {
+    callbacks.onError(new Error(`Network error: ${String(err)}`));
+    return;
+  }
 
-  await new Promise((resolve) => setTimeout(resolve, 700));
+  if (!response.ok || !response.body) {
+    const text = await response.text().catch(() => `HTTP ${response.status}`);
+    callbacks.onError(new Error(text));
+    return;
+  }
 
-  return {
-    message:
-      "QuantAI backend placeholder.\n\nReplace callQuantAIBackend(prompt) in src/lib/backend.ts with your Databricks MLflow Responses Agent integration when the endpoint is ready.",
-    toolCalls: [],
-  };
+  const reader = response.body.getReader();
+  const decoder = new TextDecoder();
+  let buffer = "";
+  let currentEvent = "";
+
+  try {
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+
+      buffer += decoder.decode(value, { stream: true });
+      const lines = buffer.split("\n");
+      // Keep the last (possibly incomplete) line in the buffer
+      buffer = lines.pop() ?? "";
+
+      for (const line of lines) {
+        if (line.startsWith("event: ")) {
+          currentEvent = line.slice(7).trim();
+        } else if (line.startsWith("data: ")) {
+          const raw = line.slice(6).trim();
+          if (!raw || raw === "{}") {
+            if (currentEvent === "done") callbacks.onDone();
+            currentEvent = "";
+            continue;
+          }
+          try {
+            const data = JSON.parse(raw) as Record<string, unknown>;
+            dispatchEvent(currentEvent, data, callbacks);
+          } catch {
+            // Malformed JSON in SSE data — skip
+          }
+          currentEvent = "";
+        } else if (line === "") {
+          // Blank line = SSE event separator; reset event type
+          currentEvent = "";
+        }
+      }
+    }
+  } catch (err) {
+    callbacks.onError(new Error(`Stream read error: ${String(err)}`));
+  } finally {
+    reader.releaseLock();
+  }
+}
+
+function dispatchEvent(
+  event: string,
+  data: Record<string, unknown>,
+  cb: StreamCallbacks
+): void {
+  switch (event) {
+    case "tool_call_start":
+      cb.onToolCallStart(data.id as string, data.toolName as string);
+      break;
+    case "tool_call_delta":
+      cb.onToolCallDelta(data.id as string, data.inputChunk as string);
+      break;
+    case "tool_call_end":
+      cb.onToolCallEnd(
+        data.id as string,
+        data.output as string,
+        data.durationMs as number
+      );
+      break;
+    case "message_delta":
+      cb.onMessageDelta(data.text as string);
+      break;
+    case "done":
+      cb.onDone();
+      break;
+  }
 }

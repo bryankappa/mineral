@@ -44,18 +44,45 @@ export default function Home() {
       setToolCalls([]);
       setResponseMessage(null);
 
-      try {
-        const result = await callQuantAIBackend(prompt);
+      // Accumulate raw input JSON per tool call id
+      const inputBuffers: Record<string, string> = {};
 
-        for (const toolCall of result.toolCalls) {
-          await new Promise((resolve) => setTimeout(resolve, 180));
-          setToolCalls((previousToolCalls) => [...previousToolCalls, toolCall]);
-        }
-
-        setResponseMessage(result.message);
-      } finally {
-        setIsThinking(false);
-      }
+      await callQuantAIBackend(prompt, {
+        onToolCallStart: (id, toolName) => {
+          inputBuffers[id] = "";
+          setToolCalls((prev) => [
+            ...prev,
+            { id, toolName, input: {}, output: "", durationMs: 0, status: "running" },
+          ]);
+        },
+        onToolCallDelta: (id, inputChunk) => {
+          inputBuffers[id] = (inputBuffers[id] ?? "") + inputChunk;
+          setToolCalls((prev) =>
+            prev.map((tc) =>
+              tc.id === id
+                ? { ...tc, input: safeParseJson(inputBuffers[id]) }
+                : tc
+            )
+          );
+        },
+        onToolCallEnd: (id, output, durationMs) => {
+          setToolCalls((prev) =>
+            prev.map((tc) =>
+              tc.id === id ? { ...tc, output, durationMs, status: "complete" } : tc
+            )
+          );
+        },
+        onMessageDelta: (text) => {
+          setResponseMessage((prev) => (prev ?? "") + text);
+        },
+        onDone: () => {
+          setIsThinking(false);
+        },
+        onError: (error) => {
+          console.error("QuantAI stream error:", error);
+          setIsThinking(false);
+        },
+      });
     },
     [selectedSessionId]
   );
@@ -94,29 +121,37 @@ function HomeView({
     <main className="relative flex-1 overflow-hidden bg-white">
       <div className="dot-pattern absolute inset-0" aria-hidden="true" />
       <div
-        className="dot-cluster dot-cluster-left absolute -left-[2%] top-[46%] h-[420px] w-[420px]"
+        className="dot-cluster dot-cluster-left absolute -left-[2%] top-[46%] h-[380px] w-[380px]"
         aria-hidden="true"
       />
       <div
-        className="dot-cluster dot-cluster-right absolute right-[9%] top-[54%] h-[250px] w-[520px]"
+        className="dot-cluster dot-cluster-right absolute right-[8%] top-[52%] h-[220px] w-[480px]"
         aria-hidden="true"
       />
 
       <div className="relative z-10 flex h-full flex-col items-center justify-center px-10">
-        <div className="flex w-full translate-y-5 flex-col items-center">
+        <div className="flex w-full translate-y-3 flex-col items-center">
           <ChatInput onSubmit={onSendMessage} disabled={isThinking} />
           <MetricCards />
         </div>
       </div>
 
-      <div className="absolute bottom-6 left-1/2 z-10 -translate-x-1/2 rounded-full border border-[#ddd8d2] bg-white px-4 py-2 text-[12px] text-zinc-400 shadow-[0_2px_6px_rgba(23,23,23,0.06)]">
-        <div className="flex items-center gap-2">
-          <span className="inline-block h-[7px] w-[7px] rounded-full bg-zinc-300" />
+      <div className="absolute bottom-5 left-1/2 z-10 -translate-x-1/2 rounded-full border border-zinc-200 bg-white px-3.5 py-1.5 text-[11.5px] text-zinc-400 shadow-[0_1px_6px_rgba(0,0,0,0.06)]">
+        <div className="flex items-center gap-1.5">
+          <span className="inline-block h-[6px] w-[6px] rounded-full bg-zinc-300" />
           <span>No agents connected</span>
         </div>
       </div>
     </main>
   );
+}
+
+function safeParseJson(s: string): Record<string, unknown> {
+  try {
+    return JSON.parse(s) as Record<string, unknown>;
+  } catch {
+    return { _raw: s };
+  }
 }
 
 function toSessionTitle(prompt: string): string {

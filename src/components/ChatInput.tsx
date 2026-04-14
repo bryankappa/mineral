@@ -19,11 +19,7 @@ export default function ChatInput({
 
   const handleSubmit = () => {
     const trimmedValue = value.trim();
-
-    if (!trimmedValue || disabled) {
-      return;
-    }
-
+    if (!trimmedValue || disabled) return;
     onSubmit(trimmedValue);
     setValue("");
   };
@@ -31,73 +27,71 @@ export default function ChatInput({
   return (
     <div className={`w-full ${maxWidthClass}`}>
       <div
-        className={`overflow-hidden rounded-[14px] border bg-[#fbfaf8] transition ${
+        className={`overflow-hidden rounded-2xl border bg-white transition-all duration-150 ${
           disabled
-            ? "border-[#ddd8d2] opacity-70"
-            : "border-[#d8d3cd] shadow-[0_6px_16px_rgba(26,26,26,0.05)]"
+            ? "border-zinc-200 opacity-60"
+            : "border-zinc-200 shadow-[0_2px_16px_rgba(0,0,0,0.07)] hover:shadow-[0_4px_24px_rgba(0,0,0,0.1)]"
         }`}
       >
-        <div className="relative min-h-[110px]">
-          <textarea
-            rows={1}
-            value={value}
-            onChange={(event) => setValue(event.target.value)}
-            onKeyDown={(event) => {
-              if (event.key === "Enter" && !event.shiftKey) {
-                event.preventDefault();
-                handleSubmit();
-              }
-            }}
-            placeholder="Ask or build anything"
-            disabled={disabled}
-            aria-label="Message input"
-            className="h-[82px] w-full resize-none bg-transparent px-4 pt-3.5 pb-11 text-[14px] leading-5 text-zinc-700 placeholder:text-zinc-500 focus:outline-none disabled:opacity-50"
-          />
+        <textarea
+          rows={1}
+          value={value}
+          onChange={(e) => setValue(e.target.value)}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" && !e.shiftKey) {
+              e.preventDefault();
+              handleSubmit();
+            }
+          }}
+          placeholder="Ask or build anything"
+          disabled={disabled}
+          aria-label="Message input"
+          className="min-h-[72px] w-full resize-none bg-transparent px-4 pt-4 pb-2 text-[14px] leading-6 text-zinc-800 placeholder:text-zinc-400 focus:outline-none disabled:opacity-50"
+        />
 
-          <div className="absolute inset-x-0 bottom-2 flex items-center justify-between px-3">
+        <div className="flex items-center justify-between px-3 pb-3">
+          <button
+            aria-label="Select model"
+            className="flex items-center gap-1.5 rounded-lg px-2 py-1.5 text-[13px] transition-colors hover:bg-zinc-50"
+          >
+            <span className="flex h-[18px] w-[18px] items-center justify-center rounded-full bg-zinc-100 text-[9px] font-semibold text-zinc-600">
+              Q
+            </span>
+            <span className="font-medium text-zinc-600">QuantAI</span>
+            <ChevronDown size={11} className="text-zinc-400" />
+          </button>
+
+          <div className="flex items-center gap-0.5">
             <button
-              aria-label="Select model"
-              className="flex items-center gap-1.5 rounded-md px-2 py-1 text-[13px] text-zinc-700 transition-colors hover:bg-white"
+              className="rounded-lg p-1.5 text-zinc-400 transition-colors hover:bg-zinc-50 hover:text-zinc-600"
+              aria-label="Voice input"
             >
-              <span className="flex h-[16px] w-[16px] items-center justify-center rounded-full border border-zinc-300 text-[9px] font-semibold text-zinc-400">
-                Q
-              </span>
-              <span>QuantAI</span>
-              <ChevronDown size={12} className="text-zinc-400" />
+              <Mic size={16} strokeWidth={1.75} />
             </button>
-
-            <div className="flex items-center gap-0.5">
-              <button
-                className="rounded-md p-1.5 text-zinc-500 transition-colors hover:bg-white hover:text-zinc-700"
-                aria-label="Voice input"
-              >
-                <Mic size={18} strokeWidth={1.75} />
-              </button>
-              <button
-                className="rounded-md p-1.5 text-zinc-500 transition-colors hover:bg-white hover:text-zinc-700"
-                aria-label="Attach file"
-              >
-                <Paperclip size={18} strokeWidth={1.75} />
-              </button>
-              <button
-                onClick={handleSubmit}
-                disabled={!canSubmit}
-                className={`rounded-md p-1.5 transition-colors hover:bg-white hover:text-zinc-700 ${
-                  canSubmit
-                    ? "text-zinc-500 cursor-pointer"
-                    : "text-zinc-300 cursor-not-allowed opacity-55"
-                }`}
-                aria-label="Send message"
-              >
-                <ArrowUp size={17} strokeWidth={1.75} />
-              </button>
-            </div>
+            <button
+              className="rounded-lg p-1.5 text-zinc-400 transition-colors hover:bg-zinc-50 hover:text-zinc-600"
+              aria-label="Attach file"
+            >
+              <Paperclip size={16} strokeWidth={1.75} />
+            </button>
+            <button
+              onClick={handleSubmit}
+              disabled={!canSubmit}
+              className={`ml-0.5 rounded-full p-1.5 transition-all duration-150 ${
+                canSubmit
+                  ? "cursor-pointer bg-zinc-900 text-white hover:bg-zinc-700"
+                  : "cursor-not-allowed bg-zinc-100 text-zinc-300"
+              }`}
+              aria-label="Send message"
+            >
+              <ArrowUp size={15} strokeWidth={2.25} />
+            </button>
           </div>
         </div>
 
-        <div className="flex items-center justify-between border-t border-[#e4dfda] px-4 py-1.5 text-[12px] font-mono text-zinc-500">
-          <span>claude opus 4.5</span>
-          <span className="font-medium text-zinc-600">build agent</span>
+        <div className="flex items-center justify-between border-t border-zinc-100 px-4 py-2 text-[11px]">
+          <span className="font-mono text-zinc-400">claude opus 4.5</span>
+          <span className="font-medium text-zinc-500">build agent</span>
         </div>
       </div>
     </div>
