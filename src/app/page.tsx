@@ -7,7 +7,7 @@ import SessionDetail from "@/components/SessionDetail";
 import Sidebar from "@/components/Sidebar";
 import SkillsBrowser from "@/components/SkillsBrowser";
 import { callQuantAIBackend, fetchSkills } from "@/lib/backend";
-import type { Skill, ToolCall } from "@/lib/backend";
+import type { Skill, Task, ToolCall } from "@/lib/backend";
 import type { Session } from "@/lib/types";
 
 export default function Home() {
@@ -20,6 +20,7 @@ export default function Home() {
   const [activeSkillIds, setActiveSkillIds] = useState<string[]>([]);
   const [showSkills, setShowSkills] = useState(false);
   const [focusSkillId, setFocusSkillId] = useState<string | null>(null);
+  const [tasks, setTasks] = useState<Task[]>([]);
 
   const selectedSession =
     sessions.find((session) => session.id === selectedSessionId) ?? null;
@@ -46,6 +47,7 @@ export default function Home() {
     setToolCalls([]);
     setResponseMessage(null);
     setActiveSkillIds([]);
+    setTasks([]);
     setIsThinking(false);
   }, []);
 
@@ -61,7 +63,6 @@ export default function Home() {
           {
             id: sessionId,
             title: toSessionTitle(prompt),
-            subtitle: "",
             age: "now",
             active: true,
           },
@@ -74,6 +75,7 @@ export default function Home() {
       setToolCalls([]);
       setResponseMessage(null);
       setActiveSkillIds([]);
+      setTasks([]);
 
       // Accumulate raw input JSON per tool call id
       const inputBuffers: Record<string, string> = {};
@@ -81,6 +83,17 @@ export default function Home() {
       await callQuantAIBackend(prompt, {
         onSkillsActivated: (ids) => {
           setActiveSkillIds(ids);
+        },
+        onTaskPlan: (titles) => {
+          setTasks(
+            titles.map((title, idx) => ({
+              title,
+              status: idx === 0 ? "running" : "pending",
+            }))
+          );
+        },
+        onTaskUpdate: (index) => {
+          setTasks((prev) => advanceTasks(prev, index));
         },
         onToolCallStart: (id, toolName) => {
           inputBuffers[id] = "";
@@ -105,12 +118,14 @@ export default function Home() {
               tc.id === id ? { ...tc, output, durationMs, status: "complete" } : tc
             )
           );
+          setTasks((prev) => advanceNextRunning(prev));
         },
         onMessageDelta: (text) => {
           setResponseMessage((prev) => (prev ?? "") + text);
         },
         onDone: () => {
           setIsThinking(false);
+          setTasks((prev) => completeAllTasks(prev));
         },
         onError: (error) => {
           console.error("QuantAI stream error:", error);
@@ -140,6 +155,7 @@ export default function Home() {
           skills={skills}
           activeSkillIds={activeSkillIds}
           onSkillClick={(id) => handleOpenSkills(id)}
+          tasks={tasks}
         />
       ) : (
         <HomeView
@@ -209,6 +225,30 @@ function safeParseJson(s: string): Record<string, unknown> {
   } catch {
     return { _raw: s };
   }
+}
+
+function advanceTasks(tasks: Task[], completedIndex: number): Task[] {
+  return tasks.map((task, idx) => {
+    if (idx <= completedIndex) return { ...task, status: "complete" };
+    if (idx === completedIndex + 1) return { ...task, status: "running" };
+    return task;
+  });
+}
+
+function advanceNextRunning(tasks: Task[]): Task[] {
+  const firstRunning = tasks.findIndex((t) => t.status === "running");
+  if (firstRunning === -1) return tasks;
+  return tasks.map((task, idx) => {
+    if (idx < firstRunning) return task;
+    if (idx === firstRunning) return { ...task, status: "complete" };
+    if (idx === firstRunning + 1 && task.status === "pending")
+      return { ...task, status: "running" };
+    return task;
+  });
+}
+
+function completeAllTasks(tasks: Task[]): Task[] {
+  return tasks.map((task) => ({ ...task, status: "complete" }));
 }
 
 function toSessionTitle(prompt: string): string {

@@ -6,6 +6,8 @@
  *
  * SSE event vocabulary (emitted by the Python agent):
  *   skills_activated → { ids }
+ *   task_plan        → { tasks: [str, ...] }
+ *   task_update      → { index: number, status: "complete" }
  *   tool_call_start  → { id, toolName }
  *   tool_call_delta  → { id, inputChunk }
  *   tool_call_end    → { id, output, durationMs }
@@ -22,6 +24,13 @@ export interface ToolCall {
   status: "running" | "complete";
 }
 
+export type TaskStatus = "pending" | "running" | "complete";
+
+export interface Task {
+  title: string;
+  status: TaskStatus;
+}
+
 export interface Skill {
   id: string;
   title: string;
@@ -35,6 +44,8 @@ export interface Skill {
 
 export interface StreamCallbacks {
   onSkillsActivated: (ids: string[]) => void;
+  onTaskPlan: (tasks: string[]) => void;
+  onTaskUpdate: (index: number) => void;
   onToolCallStart: (id: string, toolName: string) => void;
   onToolCallDelta: (id: string, inputChunk: string) => void;
   onToolCallEnd: (id: string, output: string, durationMs: number) => void;
@@ -127,6 +138,12 @@ function dispatchEvent(
   switch (event) {
     case "skills_activated":
       cb.onSkillsActivated((data.ids as string[]) ?? []);
+      break;
+    case "task_plan":
+      cb.onTaskPlan((data.tasks as string[]) ?? []);
+      break;
+    case "task_update":
+      cb.onTaskUpdate((data.index as number) ?? 0);
       break;
     case "tool_call_start":
       cb.onToolCallStart(data.id as string, data.toolName as string);
