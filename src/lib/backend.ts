@@ -5,6 +5,7 @@
  * the SSE stream, dispatching events to the provided callbacks.
  *
  * SSE event vocabulary (emitted by the Python agent):
+ *   skills_activated → { ids }
  *   tool_call_start  → { id, toolName }
  *   tool_call_delta  → { id, inputChunk }
  *   tool_call_end    → { id, output, durationMs }
@@ -21,13 +22,34 @@ export interface ToolCall {
   status: "running" | "complete";
 }
 
+export interface Skill {
+  id: string;
+  title: string;
+  domain: string;
+  description: string;
+  triggers: string[];
+  examples: string[];
+  enabled: boolean;
+  body: string;
+}
+
 export interface StreamCallbacks {
+  onSkillsActivated: (ids: string[]) => void;
   onToolCallStart: (id: string, toolName: string) => void;
   onToolCallDelta: (id: string, inputChunk: string) => void;
   onToolCallEnd: (id: string, output: string, durationMs: number) => void;
   onMessageDelta: (text: string) => void;
   onDone: () => void;
   onError: (error: Error) => void;
+}
+
+export async function fetchSkills(): Promise<Skill[]> {
+  const response = await fetch("/api/skills", { cache: "no-store" });
+  if (!response.ok) {
+    throw new Error(`Skills fetch failed: HTTP ${response.status}`);
+  }
+  const json = (await response.json()) as { skills?: Skill[] };
+  return json.skills ?? [];
 }
 
 export async function callQuantAIBackend(
@@ -103,6 +125,9 @@ function dispatchEvent(
   cb: StreamCallbacks
 ): void {
   switch (event) {
+    case "skills_activated":
+      cb.onSkillsActivated((data.ids as string[]) ?? []);
+      break;
     case "tool_call_start":
       cb.onToolCallStart(data.id as string, data.toolName as string);
       break;

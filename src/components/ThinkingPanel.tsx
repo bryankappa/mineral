@@ -1,27 +1,55 @@
 "use client";
 
 import { useState } from "react";
-import { Bot, ChevronDown, ChevronRight, Zap } from "lucide-react";
-import type { ToolCall } from "@/lib/backend";
+import { Bot, ChevronDown, ChevronRight, Sparkles, Zap } from "lucide-react";
+import type { Skill, ToolCall } from "@/lib/backend";
 
 interface ThinkingPanelProps {
   toolCalls: ToolCall[];
   message: string | null;
   isThinking: boolean;
+  skills: Skill[];
+  activeSkillIds: string[];
+  onSkillClick: (skillId: string) => void;
 }
 
 export default function ThinkingPanel({
   toolCalls,
   message,
   isThinking,
+  skills,
+  activeSkillIds,
+  onSkillClick,
 }: ThinkingPanelProps) {
   const showEmptyState = !toolCalls.length && !message && !isThinking;
+  const activeSkills = activeSkillIds
+    .map((id) => skills.find((s) => s.id === id))
+    .filter((s): s is Skill => s != null);
 
   return (
     <div className="mx-auto flex w-full max-w-[980px] flex-col gap-4 px-8 py-8">
       {showEmptyState ? (
         <div className="rounded-xl border border-zinc-100 bg-zinc-50/70 px-5 py-6 text-[13px] text-zinc-400">
           No activity yet. Send a prompt to start a QuantAI session.
+        </div>
+      ) : null}
+
+      {activeSkills.length > 0 ? (
+        <div className="flex flex-wrap items-center gap-2">
+          <span className="flex items-center gap-1 text-[10.5px] font-semibold uppercase tracking-[0.08em] text-zinc-400">
+            <Sparkles size={10} className="text-amber-400" />
+            Skills in use
+          </span>
+          {activeSkills.map((skill) => (
+            <button
+              key={skill.id}
+              onClick={() => onSkillClick(skill.id)}
+              className="inline-flex items-center gap-1.5 rounded-full border border-zinc-200 bg-zinc-50 px-2.5 py-0.5 text-[11px] text-zinc-600 transition-colors hover:border-zinc-300 hover:bg-white hover:text-zinc-900"
+            >
+              <span className="inline-block h-1.5 w-1.5 animate-pulse rounded-full bg-green-400" />
+              {skill.title}
+            </button>
+          ))}
         </div>
       ) : null}
 

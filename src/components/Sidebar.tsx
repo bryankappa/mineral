@@ -10,9 +10,10 @@ interface SidebarProps {
   sessions: Session[];
   selectedId: string | null;
   onSelect: (id: string) => void;
+  onLogoClick?: () => void;
 }
 
-export default function Sidebar({ sessions, selectedId, onSelect }: SidebarProps) {
+export default function Sidebar({ sessions, selectedId, onSelect, onLogoClick }: SidebarProps) {
   const [query, setQuery] = useState("");
 
   const filteredSessions = sessions.filter(
@@ -27,10 +28,15 @@ export default function Sidebar({ sessions, selectedId, onSelect }: SidebarProps
   return (
     <aside className="flex h-screen w-[240px] min-w-[240px] flex-col border-r border-zinc-100 bg-white">
       <div className="flex items-center justify-between px-4 pb-4 pt-6">
-        <div className="flex items-center gap-2 text-zinc-900">
+        <button
+          type="button"
+          onClick={onLogoClick}
+          aria-label="New chat"
+          className="-m-1 flex items-center gap-2 rounded-md p-1 text-zinc-900 transition-colors hover:bg-zinc-50"
+        >
           <Image src={logo} alt="Logo" width={20} height={20} />
           <span className="text-[13.5px] font-semibold tracking-[-0.01em]">QuantAI</span>
-        </div>
+        </button>
 
         <div className="flex items-center gap-2">
           <button

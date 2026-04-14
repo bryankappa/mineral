@@ -1,12 +1,13 @@
 "use client";
 
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import ChatInput from "@/components/ChatInput";
 import MetricCards from "@/components/MetricCards";
 import SessionDetail from "@/components/SessionDetail";
 import Sidebar from "@/components/Sidebar";
-import { callQuantAIBackend } from "@/lib/backend";
-import type { ToolCall } from "@/lib/backend";
+import SkillsBrowser from "@/components/SkillsBrowser";
+import { callQuantAIBackend, fetchSkills } from "@/lib/backend";
+import type { Skill, ToolCall } from "@/lib/backend";
 import type { Session } from "@/lib/types";
 
 export default function Home() {
@@ -15,9 +16,38 @@ export default function Home() {
   const [isThinking, setIsThinking] = useState(false);
   const [toolCalls, setToolCalls] = useState<ToolCall[]>([]);
   const [responseMessage, setResponseMessage] = useState<string | null>(null);
+  const [skills, setSkills] = useState<Skill[]>([]);
+  const [activeSkillIds, setActiveSkillIds] = useState<string[]>([]);
+  const [showSkills, setShowSkills] = useState(false);
+  const [focusSkillId, setFocusSkillId] = useState<string | null>(null);
 
   const selectedSession =
     sessions.find((session) => session.id === selectedSessionId) ?? null;
+
+  useEffect(() => {
+    let cancelled = false;
+    fetchSkills()
+      .then((loaded) => {
+        if (!cancelled) setSkills(loaded);
+      })
+      .catch((err) => console.error("Failed to fetch skills:", err));
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  const handleOpenSkills = useCallback((skillId?: string) => {
+    setFocusSkillId(skillId ?? null);
+    setShowSkills(true);
+  }, []);
+
+  const handleLogoClick = useCallback(() => {
+    setSelectedSessionId(null);
+    setToolCalls([]);
+    setResponseMessage(null);
+    setActiveSkillIds([]);
+    setIsThinking(false);
+  }, []);
 
   const handleSendMessage = useCallback(
     async (prompt: string) => {
@@ -43,11 +73,15 @@ export default function Home() {
       setIsThinking(true);
       setToolCalls([]);
       setResponseMessage(null);
+      setActiveSkillIds([]);
 
       // Accumulate raw input JSON per tool call id
       const inputBuffers: Record<string, string> = {};
 
       await callQuantAIBackend(prompt, {
+        onSkillsActivated: (ids) => {
+          setActiveSkillIds(ids);
+        },
         onToolCallStart: (id, toolName) => {
           inputBuffers[id] = "";
           setToolCalls((prev) => [
@@ -93,6 +127,7 @@ export default function Home() {
         sessions={sessions}
         selectedId={selectedSessionId}
         onSelect={setSelectedSessionId}
+        onLogoClick={handleLogoClick}
       />
 
       {selectedSession ? (
@@ -102,10 +137,28 @@ export default function Home() {
           responseMessage={responseMessage}
           isThinking={isThinking}
           onSendMessage={handleSendMessage}
+          skills={skills}
+          activeSkillIds={activeSkillIds}
+          onSkillClick={(id) => handleOpenSkills(id)}
         />
       ) : (
-        <HomeView onSendMessage={handleSendMessage} isThinking={isThinking} />
+        <HomeView
+          onSendMessage={handleSendMessage}
+          isThinking={isThinking}
+          skillCount={skills.length}
+          onOpenSkills={() => handleOpenSkills()}
+        />
       )}
+
+      {showSkills ? (
+        <SkillsBrowser
+          key={focusSkillId ?? "browser"}
+          skills={skills}
+          focusSkillId={focusSkillId}
+          onClose={() => setShowSkills(false)}
+          onRunExample={(prompt) => handleSendMessage(prompt)}
+        />
+      ) : null}
     </div>
   );
 }
@@ -113,9 +166,13 @@ export default function Home() {
 function HomeView({
   onSendMessage,
   isThinking,
+  skillCount,
+  onOpenSkills,
 }: {
   onSendMessage: (prompt: string) => void;
   isThinking: boolean;
+  skillCount: number;
+  onOpenSkills: () => void;
 }) {
   return (
     <main className="relative flex-1 overflow-hidden bg-white">
@@ -132,14 +189,14 @@ function HomeView({
       <div className="relative z-10 flex h-full flex-col items-center justify-center px-10">
         <div className="flex w-full translate-y-3 flex-col items-center">
           <ChatInput onSubmit={onSendMessage} disabled={isThinking} />
-          <MetricCards />
+          <MetricCards skillCount={skillCount} onOpenSkills={onOpenSkills} />
         </div>
       </div>
 
-      <div className="absolute bottom-5 left-1/2 z-10 -translate-x-1/2 rounded-full border border-zinc-200 bg-white px-3.5 py-1.5 text-[11.5px] text-zinc-400 shadow-[0_1px_6px_rgba(0,0,0,0.06)]">
+      <div className="absolute bottom-5 left-1/2 z-10 -translate-x-1/2 rounded-full border border-zinc-200 bg-white px-3.5 py-1.5 text-[11.5px] text-zinc-500 shadow-[0_1px_6px_rgba(0,0,0,0.06)]">
         <div className="flex items-center gap-1.5">
-          <span className="inline-block h-[6px] w-[6px] rounded-full bg-zinc-300" />
-          <span>No agents connected</span>
+          <span className="inline-block h-[6px] w-[6px] animate-pulse rounded-full bg-green-400" />
+          <span>1 agent online</span>
         </div>
       </div>
     </main>

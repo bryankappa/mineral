@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { ArrowUp, ChevronDown, Mic, Paperclip } from "lucide-react";
+import { ArrowUp, ChevronDown, Paperclip } from "lucide-react";
 
 interface ChatInputProps {
   onSubmit: (prompt: string) => void;
@@ -62,12 +62,6 @@ export default function ChatInput({
           </button>
 
           <div className="flex items-center gap-0.5">
-            <button
-              className="rounded-lg p-1.5 text-zinc-400 transition-colors hover:bg-zinc-50 hover:text-zinc-600"
-              aria-label="Voice input"
-            >
-              <Mic size={16} strokeWidth={1.75} />
-            </button>
             <button
               className="rounded-lg p-1.5 text-zinc-400 transition-colors hover:bg-zinc-50 hover:text-zinc-600"
               aria-label="Attach file"

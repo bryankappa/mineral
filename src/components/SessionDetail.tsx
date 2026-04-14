@@ -1,7 +1,7 @@
 "use client";
 
 import { Bot, Clock, MessageSquare, Share2, Terminal, Upload } from "lucide-react";
-import type { ToolCall } from "@/lib/backend";
+import type { Skill, ToolCall } from "@/lib/backend";
 import type { Session } from "@/lib/types";
 import ChatInput from "./ChatInput";
 import ThinkingPanel from "./ThinkingPanel";
@@ -12,6 +12,9 @@ interface SessionDetailProps {
   responseMessage: string | null;
   isThinking: boolean;
   onSendMessage: (prompt: string) => void;
+  skills: Skill[];
+  activeSkillIds: string[];
+  onSkillClick: (skillId: string) => void;
 }
 
 export default function SessionDetail({
@@ -20,6 +23,9 @@ export default function SessionDetail({
   responseMessage,
   isThinking,
   onSendMessage,
+  skills,
+  activeSkillIds,
+  onSkillClick,
 }: SessionDetailProps) {
   return (
     <div className="flex h-screen flex-1 flex-col bg-white">
@@ -59,6 +65,9 @@ export default function SessionDetail({
             toolCalls={toolCalls}
             message={responseMessage}
             isThinking={isThinking}
+            skills={skills}
+            activeSkillIds={activeSkillIds}
+            onSkillClick={onSkillClick}
           />
           <div className="mt-auto" />
         </div>

@@ -1,53 +1,50 @@
 "use client";
 
-import { useState } from "react";
-import { Plus } from "lucide-react";
-import AddSkillModal from "./AddSkillModal";
+import { BookOpen } from "lucide-react";
 
-export default function MetricCards() {
-  const [showSkillModal, setShowSkillModal] = useState(false);
+interface MetricCardsProps {
+  skillCount: number;
+  onOpenSkills: () => void;
+}
 
+export default function MetricCards({ skillCount, onOpenSkills }: MetricCardsProps) {
   return (
-    <>
-      <div className="mt-4 grid w-full max-w-[610px] grid-cols-3 gap-3">
-        <MetricCard
-          label="Databricks Cluster Usage"
-          value="--"
-          sub="Awaiting telemetry"
-        />
+    <div className="mt-4 grid w-full max-w-[610px] grid-cols-3 gap-3">
+      <MetricCard
+        label="Databricks Cluster Usage"
+        value="--"
+        sub="Awaiting telemetry"
+      />
 
-        <MetricCard
-          label="Active Skills / SMEs"
-          value="0"
-          sub="No modules loaded"
-          action={
-            <button
-              onClick={() => setShowSkillModal(true)}
-              aria-label="Add a new skill or SME module"
-              className="flex items-center gap-1 text-[11.5px] text-zinc-500 transition-colors hover:text-zinc-700"
-            >
-              <Plus size={12} strokeWidth={2} />
-              <span>Add Skill</span>
-            </button>
-          }
-          chartTone="blue"
-        />
+      <MetricCard
+        label="Active Skills / SMEs"
+        value={String(skillCount)}
+        sub="Loaded from skills/"
+        action={
+          <button
+            onClick={onOpenSkills}
+            aria-label="Browse the skills library"
+            className="flex items-center gap-1 text-[11.5px] text-zinc-500 transition-colors hover:text-zinc-700"
+          >
+            <BookOpen size={12} strokeWidth={2} />
+            <span>Browse Skills</span>
+          </button>
+        }
+        chartTone="blue"
+      />
 
-        <MetricCard
-          label="Agents Online"
-          value="0"
-          sub="No active agents"
-          badge={
-            <span className="ml-2 inline-flex h-2 w-2 rounded-full bg-zinc-300" />
-          }
-          chartTone="green"
-        />
-      </div>
-
-      {showSkillModal ? (
-        <AddSkillModal onClose={() => setShowSkillModal(false)} />
-      ) : null}
-    </>
+      <MetricCard
+        label="Agents Online"
+        // Hardcoded to 1 (the current user). Wire to a presence endpoint when
+        // multi-user support lands.
+        value="1"
+        sub="You're online"
+        badge={
+          <span className="ml-2 inline-flex h-2 w-2 animate-pulse rounded-full bg-green-400" />
+        }
+        chartTone="green"
+      />
+    </div>
   );
 }
 
