@@ -1,7 +1,16 @@
 command: ["bash", "start.sh"]
 
 env:
+  # ── Deployment ────────────────────────────────────────────────────────────
+  # Set this to your deployed quantai-agent Databricks App URL:
   - name: DATABRICKS_ENDPOINT_URL
-    value: "http://localhost:5001/invocations"
+    value: ""
+
+  # ── Local prototyping ─────────────────────────────────────────────────────
+  # When running locally, uncomment the line below and comment out the one
+  # above to point at your local Flask server instead:
+  # - name: DATABRICKS_ENDPOINT_URL
+  #   value: "http://localhost:5001/invocations"
+
   - name: MOCK_MODE
     value: "false"
