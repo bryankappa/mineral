@@ -24,7 +24,7 @@ export interface ToolCall {
   status: "running" | "complete";
 }
 
-export type TaskStatus = "pending" | "running" | "complete";
+type TaskStatus = "pending" | "running" | "complete";
 
 export interface Task {
   title: string;
@@ -42,7 +42,7 @@ export interface Skill {
   body: string;
 }
 
-export interface StreamCallbacks {
+interface StreamCallbacks {
   onSkillsActivated: (ids: string[]) => void;
   onTaskPlan: (tasks: string[]) => void;
   onTaskUpdate: (index: number) => void;

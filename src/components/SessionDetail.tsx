@@ -1,14 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import {
-  MessageSquare,
-  PanelRightClose,
-  PanelRightOpen,
-  Share2,
-  Terminal,
-  Upload,
-} from "lucide-react";
+import { MessageSquare, PanelRightClose, PanelRightOpen } from "lucide-react";
 import type { Skill, Task, ToolCall } from "@/lib/backend";
 import type { Session } from "@/lib/types";
 import ChatInput from "./ChatInput";
@@ -72,25 +65,6 @@ export default function SessionDetail({
         </div>
 
         <div className="flex items-center gap-0.5">
-          <button
-            className="rounded-lg p-1.5 text-zinc-400 transition-colors hover:bg-zinc-50 hover:text-zinc-600"
-            aria-label="Share"
-          >
-            <Share2 size={14} />
-          </button>
-          <button
-            className="rounded-lg p-1.5 text-zinc-400 transition-colors hover:bg-zinc-50 hover:text-zinc-600"
-            aria-label="Terminal"
-          >
-            <Terminal size={14} />
-          </button>
-          <button
-            className="rounded-lg p-1.5 text-zinc-400 transition-colors hover:bg-zinc-50 hover:text-zinc-600"
-            aria-label="Export"
-          >
-            <Upload size={14} />
-          </button>
-          <div className="mx-1 h-4 w-px bg-zinc-200" />
           <button
             onClick={togglePanel}
             aria-label={panelOpen ? "Collapse task panel" : "Expand task panel"}
