@@ -55,9 +55,9 @@ export default function ChatInput({
             className="flex items-center gap-1.5 rounded-lg px-2 py-1.5 text-[13px] transition-colors hover:bg-zinc-50"
           >
             <span className="flex h-[18px] w-[18px] items-center justify-center rounded-full bg-zinc-100 text-[9px] font-semibold text-zinc-600">
-              Q
+              M
             </span>
-            <span className="font-medium text-zinc-600">QuantAI</span>
+            <span className="font-medium text-zinc-600">Mineral</span>
             <ChevronDown size={11} className="text-zinc-400" />
           </button>
 

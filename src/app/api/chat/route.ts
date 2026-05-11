@@ -31,8 +31,8 @@ function mockStream(prompt: string): ReadableStream {
         id: "tc_1",
         output: JSON.stringify({
           results: [
-            { doc_path: "/Volumes/main/quantai/docs/energy_overview.md", excerpt: "Total renewable capacity reached 420 GW in 2024, led by solar (210 GW) and wind (180 GW)...", score: 0.94 },
-            { doc_path: "/Volumes/main/quantai/docs/doe_funding_2024.md", excerpt: "DOE awarded $2.4B in clean energy grants across 14 programs in FY2024...", score: 0.87 },
+            { doc_path: "/Volumes/main/mineral/docs/energy_overview.md", excerpt: "Total renewable capacity reached 420 GW in 2024, led by solar (210 GW) and wind (180 GW)...", score: 0.94 },
+            { doc_path: "/Volumes/main/mineral/docs/doe_funding_2024.md", excerpt: "DOE awarded $2.4B in clean energy grants across 14 programs in FY2024...", score: 0.87 },
           ],
         }),
         durationMs: 612,
@@ -66,12 +66,12 @@ function mockStream(prompt: string): ReadableStream {
       // Tool 3 — read_document
       emit("tool_call_start", { id: "tc_3", toolName: "read_document" });
       await wait(300);
-      emit("tool_call_delta", { id: "tc_3", inputChunk: '{"path": "/Volumes/main/quantai/docs/energy_overview.md"}' });
+      emit("tool_call_delta", { id: "tc_3", inputChunk: '{"path": "/Volumes/main/mineral/docs/energy_overview.md"}' });
       await wait(500);
       emit("tool_call_end", {
         id: "tc_3",
         output: JSON.stringify({
-          path: "/Volumes/main/quantai/docs/energy_overview.md",
+          path: "/Volumes/main/mineral/docs/energy_overview.md",
           content: "# US Energy Overview 2024\n\nTotal renewable capacity reached 420 GW...\n\n## Solar\nCalifornia leads with 42.8 TWh annual generation...",
         }),
         durationMs: 487,
@@ -82,7 +82,7 @@ function mockStream(prompt: string): ReadableStream {
       // Stream the final answer word by word
       const answer =
         `Based on my analysis of \`main.energy.eia_monthly_generation\` and ` +
-        `/Volumes/main/quantai/docs/energy_overview.md:\n\n` +
+        `/Volumes/main/mineral/docs/energy_overview.md:\n\n` +
         `**Top 5 Solar States (2024)**\n` +
         `1. California — 42.8 TWh\n` +
         `2. Texas — 31.2 TWh\n` +

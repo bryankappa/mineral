@@ -28,7 +28,7 @@ interface SessionDetailProps {
   tasks: Task[];
 }
 
-const STORAGE_KEY = "quantai.rightpanel.open";
+const STORAGE_KEY = "mineral.rightpanel.open";
 
 export default function SessionDetail({
   session,

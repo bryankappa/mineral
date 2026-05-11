@@ -13,7 +13,7 @@ interface SidebarProps {
   onLogoClick?: () => void;
 }
 
-const STORAGE_KEY = "quantai.sidebar.expanded";
+const STORAGE_KEY = "mineral.sidebar.expanded";
 
 export default function Sidebar({
   sessions,
@@ -50,7 +50,7 @@ export default function Sidebar({
           title="New chat"
           className="flex h-8 w-8 items-center justify-center rounded-md transition-colors hover:bg-zinc-100"
         >
-          <Image src={logo} alt="QuantAI" width={18} height={18} />
+          <Image src={logo} alt="Mineral" width={18} height={18} />
         </button>
 
         <button
@@ -94,7 +94,7 @@ export default function Sidebar({
           className="-m-1 flex items-center gap-2 rounded-md p-1 text-zinc-900 transition-colors hover:bg-zinc-50"
         >
           <Image src={logo} alt="Logo" width={18} height={18} />
-          <span className="text-[13px] font-semibold tracking-[-0.01em]">QuantAI</span>
+          <span className="text-[13px] font-semibold tracking-[-0.01em]">Mineral</span>
         </button>
 
         <button

@@ -2,7 +2,7 @@ command: ["bash", "start.sh"]
 
 env:
   # ── Deployment ────────────────────────────────────────────────────────────
-  # Set this to your deployed quantai-agent Databricks App URL:
+  # Set this to your deployed mineral-agent Databricks App URL:
   - name: DATABRICKS_ENDPOINT_URL
     value: ""
 

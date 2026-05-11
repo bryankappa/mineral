@@ -16,11 +16,11 @@ No test runner is configured.
 
 ## Architecture
 
-**QuantAI** is a Next.js 16 (App Router) frontend for a Databricks MLflow Responses Agent. It is a pure UI shell — all agent logic lives behind a single integration point.
+**Mineral** is a Next.js 16 (App Router) frontend for a Databricks MLflow Responses Agent. It is a pure UI shell — all agent logic lives behind a single integration point.
 
 ### Integration point
 
-`src/lib/backend.ts` — `callQuantAIBackend(prompt)` is the **only** function that talks to the backend. It currently returns mock data. Replace it with your Databricks MLflow Responses Agent call when the endpoint is ready. The `ToolCall` type it exports is used throughout the UI.
+`src/lib/backend.ts` — `callMineralBackend(prompt)` is the **only** function that talks to the backend. It currently returns mock data. Replace it with your Databricks MLflow Responses Agent call when the endpoint is ready. The `ToolCall` type it exports is used throughout the UI.
 
 ### Page & state
 

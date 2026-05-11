@@ -6,7 +6,7 @@ import MetricCards from "@/components/MetricCards";
 import SessionDetail from "@/components/SessionDetail";
 import Sidebar from "@/components/Sidebar";
 import SkillsBrowser from "@/components/SkillsBrowser";
-import { callQuantAIBackend, fetchSkills } from "@/lib/backend";
+import { callMineralBackend, fetchSkills } from "@/lib/backend";
 import type { Skill, Task, ToolCall } from "@/lib/backend";
 import type { Session } from "@/lib/types";
 
@@ -83,7 +83,7 @@ export default function Home() {
       // Accumulate raw input JSON per tool call id
       const inputBuffers: Record<string, string> = {};
 
-      await callQuantAIBackend(prompt, {
+      await callMineralBackend(prompt, {
         onSkillsActivated: (ids) => {
           setActiveSkillIds(ids);
         },
@@ -131,7 +131,7 @@ export default function Home() {
           setTasks((prev) => completeAllTasks(prev));
         },
         onError: (error) => {
-          console.error("QuantAI stream error:", error);
+          console.error("Mineral stream error:", error);
           setIsThinking(false);
         },
       });

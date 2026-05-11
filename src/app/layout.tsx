@@ -13,7 +13,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "energy",
+  title: "Mineral",
   description: "Databricks-powered quantitative AI agent platform",
 };
 

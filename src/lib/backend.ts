@@ -1,5 +1,5 @@
 /**
- * QuantAI Backend
+ * Mineral Backend
  *
  * Calls /api/chat (the Next.js proxy route to Databricks) and consumes
  * the SSE stream, dispatching events to the provided callbacks.
@@ -63,7 +63,7 @@ export async function fetchSkills(): Promise<Skill[]> {
   return json.skills ?? [];
 }
 
-export async function callQuantAIBackend(
+export async function callMineralBackend(
   prompt: string,
   callbacks: StreamCallbacks
 ): Promise<void> {

@@ -35,7 +35,7 @@ export default function ThinkingPanel({
     <div className="mx-auto flex w-full max-w-[780px] flex-col px-10 py-12">
       {showEmptyState ? (
         <p className="text-[13px] italic text-zinc-400">
-          No activity yet. Send a prompt to start a QuantAI session.
+          No activity yet. Send a prompt to start a Mineral session.
         </p>
       ) : null}
 
