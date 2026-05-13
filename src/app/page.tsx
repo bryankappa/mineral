@@ -204,26 +204,26 @@ function HomeView({
   onOpenSandbox: () => void;
 }) {
   return (
-    <main className="relative flex-1 overflow-hidden bg-transparent">
+    <main className="relative flex-1 overflow-hidden bg-[#f4f8fc]">
       <div className="home-ambient absolute inset-0" aria-hidden="true" />
       <div className="dot-pattern absolute inset-0" aria-hidden="true" />
       <div
-        className="dot-cluster dot-cluster-left absolute -left-[2%] top-[46%] h-[380px] w-[380px]"
+        className="dot-cluster dot-cluster-left absolute left-[8%] top-[34%] h-[420px] w-[520px]"
         aria-hidden="true"
       />
       <div
-        className="dot-cluster dot-cluster-right absolute right-[8%] top-[52%] h-[220px] w-[480px]"
+        className="dot-cluster dot-cluster-right absolute right-[2%] top-[32%] h-[340px] w-[520px]"
         aria-hidden="true"
       />
 
       <div className="relative z-10 flex h-full flex-col items-center justify-center px-10 py-12">
-        <div className="flex w-full translate-y-3 flex-col items-center">
-          <div className="mb-6 flex flex-col items-center gap-1.5">
-            <h1 className="text-[15px] font-semibold tracking-[-0.02em] text-[#102033]">
+        <div className="flex w-full translate-y-2 flex-col items-center">
+          <div className="mb-5 text-center">
+            <h1 className="text-[17px] font-semibold tracking-[-0.03em] text-[#102033]">
               Mineral
             </h1>
-            <p className="text-[11.5px] text-[#6b7c93]">
-              An agent shell for Databricks
+            <p className="mt-2 text-[12.5px] text-[#6b7c93]">
+              An agent workspace for data and engineering work
             </p>
           </div>
           <ChatInput onSubmit={onSendMessage} disabled={isThinking} />
@@ -235,9 +235,9 @@ function HomeView({
         </div>
       </div>
 
-      <div className="absolute bottom-5 left-1/2 z-10 -translate-x-1/2 rounded-full border border-[#d7e1ee] bg-white/80 px-3.5 py-1.5 text-[11.5px] text-[#5f738d] shadow-[0_18px_36px_rgba(15,23,42,0.08)] backdrop-blur-md">
+      <div className="absolute bottom-5 left-1/2 z-10 -translate-x-1/2 rounded-full border border-[#d7e1ee] bg-white/80 px-3.5 py-1.5 text-[11.5px] text-[#5f738d] shadow-[0_14px_34px_rgba(64,91,124,0.12)] backdrop-blur-md">
         <div className="flex items-center gap-1.5">
-          <span className="inline-block h-[6px] w-[6px] animate-pulse rounded-full bg-[#18775c] shadow-[0_0_0_4px_rgba(24,119,92,0.12)]" />
+          <span className="inline-block h-[6px] w-[6px] animate-pulse rounded-full bg-[#4b9b7c] shadow-[0_0_0_4px_rgba(75,155,124,0.14)]" />
           <span>1 agent online</span>
         </div>
       </div>

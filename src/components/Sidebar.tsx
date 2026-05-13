@@ -42,13 +42,13 @@ export default function Sidebar({
 
   if (!expanded) {
     return (
-      <aside className="flex h-screen w-[56px] min-w-[56px] flex-col items-center border-r border-[#d7e1ee] bg-white/75 py-4 backdrop-blur-xl">
+      <aside className="flex h-screen w-[52px] min-w-[52px] flex-col items-center border-r border-[#d7e1ee] bg-white/75 py-4 text-[#102033] backdrop-blur-md">
         <button
           type="button"
           onClick={onLogoClick}
           aria-label="New chat"
           title="New chat"
-          className="flex h-8 w-8 items-center justify-center rounded-md transition-colors hover:bg-[#edf4ff]"
+          className="flex h-8 w-8 items-center justify-center rounded-md transition-colors hover:bg-[#edf3fb]"
         >
           <Image src={logo} alt="Mineral" width={18} height={18} />
         </button>
@@ -58,7 +58,7 @@ export default function Sidebar({
           onClick={toggle}
           aria-label="Expand sidebar"
           title="Expand sidebar"
-          className="mt-2 flex h-8 w-8 items-center justify-center rounded-md text-[#7b8ea7] transition-colors hover:bg-[#edf4ff] hover:text-[#1d2f44]"
+          className="mt-2 flex h-8 w-8 items-center justify-center rounded-md text-[#8ea1b7] transition-colors hover:bg-[#edf3fb] hover:text-[#31445d]"
         >
           <PanelLeftOpen size={15} strokeWidth={1.7} />
         </button>
@@ -85,16 +85,16 @@ export default function Sidebar({
   const inactiveSessions = filteredSessions.filter((s) => !s.active);
 
   return (
-    <aside className="flex h-screen w-[220px] min-w-[220px] flex-col border-r border-[#d7e1ee] bg-white/70 backdrop-blur-xl">
+    <aside className="flex h-screen w-[244px] min-w-[244px] flex-col border-r border-[#d7e1ee] bg-white/70 text-[#102033] backdrop-blur-md">
       <div className="flex items-center justify-between px-3 pb-3 pt-4">
         <button
           type="button"
           onClick={onLogoClick}
           aria-label="New chat"
-          className="-m-1 flex items-center gap-2 rounded-md p-1 text-[#102033] transition-colors hover:bg-[#edf4ff]"
+          className="-m-1 flex items-center gap-2 rounded-[4px] p-1 text-[#102033] transition-colors hover:bg-[#edf3fb]"
         >
           <Image src={logo} alt="Logo" width={18} height={18} />
-          <span className="text-[13px] font-semibold tracking-[-0.01em]">Mineral</span>
+          <span className="text-[12.5px] font-medium tracking-[-0.01em]">Mineral</span>
         </button>
 
         <button
@@ -102,15 +102,15 @@ export default function Sidebar({
           onClick={toggle}
           aria-label="Collapse sidebar"
           title="Collapse sidebar"
-          className="rounded-md p-1 text-[#7b8ea7] transition-colors hover:bg-[#edf4ff] hover:text-[#1d2f44]"
+          className="rounded-[4px] p-1 text-[#8ea1b7] transition-colors hover:bg-[#edf3fb] hover:text-[#31445d]"
         >
           <PanelLeftClose size={14} strokeWidth={1.7} />
         </button>
       </div>
 
       <div className="px-3 pb-2">
-        <div className="flex items-center gap-2 rounded-xl border border-[#d7e1ee] bg-white/78 px-3 py-1.5 shadow-[0_8px_18px_rgba(15,23,42,0.04)]">
-          <Search size={12} strokeWidth={1.7} className="shrink-0 text-[#8aa0bc]" />
+        <div className="flex items-center gap-2 border-b border-[#d7e1ee] px-0 py-2">
+          <Search size={12} strokeWidth={1.7} className="shrink-0 text-[#8ea1b7]" />
           <input
             type="text"
             placeholder="Search"
@@ -133,7 +133,7 @@ export default function Sidebar({
 
         {inactiveSessions.length > 0 ? (
           <>
-            <div className="px-2 pb-1 pt-4 text-[10px] font-semibold uppercase tracking-[0.08em] text-[#8ea1b7]">
+            <div className="px-2 pb-1 pt-4 text-[10.5px] text-[#7e91a9]">
               Inactive
             </div>
             <SessionGroup
@@ -176,15 +176,15 @@ function SessionGroup({
         <li key={session.id}>
           <button
             onClick={() => onSelect(session.id)}
-            className={`w-full rounded-md px-2.5 py-1.5 text-left transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#c5d8f3] ${
+            className={`w-full rounded-[4px] px-2.5 py-1.5 text-left transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#5a82f0] ${
               selectedId === session.id
-                ? "bg-[#dce8ff] text-[#1b4db5] shadow-[inset_0_0_0_1px_rgba(30,93,216,0.1)]"
+                ? "bg-[#e8f0ff] text-[#1b4db5]"
                 : "text-[#31445d] hover:bg-white/85"
             }`}
           >
             <p className="truncate text-[12px] font-medium leading-[1.35]">{session.title}</p>
             {session.age ? (
-              <p className="mt-0.5 truncate text-[10.5px] text-[#8ea1b7]">{session.age}</p>
+              <p className="mt-0.5 truncate text-[10.5px] text-[#7e91a9]">{session.age}</p>
             ) : null}
           </button>
         </li>
