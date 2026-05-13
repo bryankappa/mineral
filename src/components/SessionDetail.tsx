@@ -56,10 +56,10 @@ export default function SessionDetail({
 
   return (
     <div className="flex h-screen flex-1 flex-col bg-white">
-      <header className="flex items-center justify-between border-b border-zinc-100 px-6 py-3">
+      <header className="flex items-center justify-between border-b border-slate-100 px-6 py-3">
         <div className="flex items-center gap-2">
-          <MessageSquare size={14} className="text-zinc-300" />
-          <h1 className="max-w-lg truncate text-[13.5px] font-semibold text-zinc-800">
+          <MessageSquare size={14} className="text-slate-300" />
+          <h1 className="max-w-lg truncate text-[13.5px] font-semibold text-slate-800">
             {session.title}
           </h1>
         </div>
@@ -69,7 +69,7 @@ export default function SessionDetail({
             onClick={togglePanel}
             aria-label={panelOpen ? "Collapse task panel" : "Expand task panel"}
             title={panelOpen ? "Collapse task panel" : "Expand task panel"}
-            className="rounded-lg p-1.5 text-zinc-400 transition-colors hover:bg-zinc-50 hover:text-zinc-600"
+            className="rounded-lg p-1.5 text-slate-400 transition-colors hover:bg-slate-50 hover:text-slate-600"
           >
             {panelOpen ? <PanelRightClose size={14} /> : <PanelRightOpen size={14} />}
           </button>
@@ -102,9 +102,9 @@ export default function SessionDetail({
         </div>
 
         {panelOpen ? (
-          <aside className="hidden w-[260px] min-w-[260px] flex-col overflow-y-auto border-l border-zinc-100 bg-white lg:flex">
+          <aside className="hidden w-[260px] min-w-[260px] flex-col overflow-y-auto border-l border-slate-100 bg-white lg:flex">
             <div className="px-5 pb-4 pt-5">
-              <p className="text-[10px] font-semibold uppercase tracking-[0.09em] text-zinc-400">
+              <p className="text-[10px] font-semibold uppercase tracking-[0.09em] text-slate-400">
                 Tasks
               </p>
               <div className="mt-3">
@@ -112,7 +112,7 @@ export default function SessionDetail({
               </div>
             </div>
 
-            <div className="mt-auto border-t border-zinc-100 px-5 py-4">
+            <div className="mt-auto border-t border-slate-100 px-5 py-4">
               <MetaRow label="Status" value={session.active ? "Active" : "Idle"} />
               <MetaRow label="Updated" value={session.age} />
               <MetaRow label="Model" value="claude-opus-4-5" />
@@ -128,10 +128,10 @@ function MetaRow({ label, value }: { label: string; value: string }) {
   if (!value) return null;
   return (
     <div className="flex items-center justify-between py-1">
-      <span className="text-[10px] font-semibold uppercase tracking-[0.07em] text-zinc-400">
+      <span className="text-[10px] font-semibold uppercase tracking-[0.07em] text-slate-400">
         {label}
       </span>
-      <span className="truncate text-[11.5px] text-zinc-600">{value}</span>
+      <span className="truncate text-[11.5px] text-slate-600">{value}</span>
     </div>
   );
 }

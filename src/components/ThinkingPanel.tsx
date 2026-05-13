@@ -34,7 +34,7 @@ export default function ThinkingPanel({
   return (
     <div className="mx-auto flex w-full max-w-[780px] flex-col px-10 py-12">
       {showEmptyState ? (
-        <p className="text-[13px] italic text-zinc-400">
+        <p className="text-[13px] italic text-slate-400">
           No activity yet. Send a prompt to start a Mineral session.
         </p>
       ) : null}
@@ -49,10 +49,10 @@ export default function ThinkingPanel({
             className="mt-[2px] rounded-full"
           />
           <div className="flex flex-col gap-1">
-            <span className="text-[11px] font-semibold text-zinc-900">
+            <span className="text-[11px] font-semibold text-slate-900">
               Quartz
             </span>
-            <p className="whitespace-pre-wrap text-[14px] leading-[1.55] text-zinc-700">
+            <p className="whitespace-pre-wrap text-[14px] leading-[1.55] text-slate-700">
               {userPrompt}
             </p>
           </div>
@@ -60,16 +60,16 @@ export default function ThinkingPanel({
       ) : null}
 
       {activeSkills.length > 0 ? (
-        <div className="mb-6 flex flex-wrap items-center gap-x-2 text-[11px] text-zinc-400">
-          <span className="font-mono uppercase tracking-[0.09em] text-zinc-300">
+        <div className="mb-6 flex flex-wrap items-center gap-x-2 text-[11px] text-slate-400">
+          <span className="font-mono uppercase tracking-[0.09em] text-slate-300">
             skills
           </span>
           {activeSkills.map((skill, idx) => (
             <span key={skill.id} className="flex items-center gap-2">
-              {idx > 0 ? <span className="text-zinc-300">·</span> : null}
+              {idx > 0 ? <span className="text-slate-300">·</span> : null}
               <button
                 onClick={() => onSkillClick(skill.id)}
-                className="text-zinc-500 transition-colors hover:text-zinc-900"
+                className="text-slate-500 transition-colors hover:text-slate-900"
               >
                 {skill.title}
               </button>
@@ -79,7 +79,7 @@ export default function ThinkingPanel({
       ) : null}
 
       {toolCalls.length > 0 || isThinking ? (
-        <div className="relative border-l border-zinc-100 pl-5">
+        <div className="relative border-l border-slate-100 pl-5">
           {toolCalls.map((call) => (
             <ToolCallLine key={call.id} call={call} />
           ))}
@@ -97,10 +97,10 @@ export default function ThinkingPanel({
 
       {message ? (
         <div className="mt-10">
-          <p className="mb-3 font-mono text-[10.5px] uppercase tracking-[0.09em] text-zinc-300">
+          <p className="mb-3 font-mono text-[10.5px] uppercase tracking-[0.09em] text-slate-300">
             answer
           </p>
-          <div className="whitespace-pre-wrap text-[14.5px] leading-[1.65] text-zinc-800">
+          <div className="whitespace-pre-wrap text-[14.5px] leading-[1.65] text-slate-800">
             {message}
           </div>
         </div>
@@ -127,28 +127,28 @@ function ToolCallLine({ call }: { call: ToolCall }) {
           <ChevronDown
             size={11}
             strokeWidth={2}
-            className="translate-y-[1px] text-zinc-300 transition-colors group-hover:text-zinc-500"
+            className="translate-y-[1px] text-slate-300 transition-colors group-hover:text-slate-500"
           />
         ) : (
           <ChevronRight
             size={11}
             strokeWidth={2}
-            className="translate-y-[1px] text-zinc-300 transition-colors group-hover:text-zinc-500"
+            className="translate-y-[1px] text-slate-300 transition-colors group-hover:text-slate-500"
           />
         )}
         <span
           className={`text-[12.5px] font-medium ${
-            running ? "shimmer-text" : "text-zinc-700"
+            running ? "shimmer-text" : "text-slate-700"
           }`}
         >
           {displayName}
         </span>
         {inputPreview ? (
-          <span className="truncate font-mono text-[11px] text-zinc-400">
+          <span className="truncate font-mono text-[11px] text-slate-400">
             {inputPreview}
           </span>
         ) : null}
-        <span className="ml-auto shrink-0 font-mono text-[10.5px] text-zinc-400">
+        <span className="ml-auto shrink-0 font-mono text-[10.5px] text-slate-400">
           {running ? "running" : `${call.durationMs}ms`}
         </span>
       </button>
@@ -157,14 +157,14 @@ function ToolCallLine({ call }: { call: ToolCall }) {
         <div className="space-y-3 pb-3 pl-5 pt-1">
           {Object.keys(call.input).length > 0 ? (
             <Block label="Input">
-              <pre className="whitespace-pre-wrap font-mono text-[11.5px] leading-[1.55] text-zinc-700">
+              <pre className="whitespace-pre-wrap font-mono text-[11.5px] leading-[1.55] text-slate-700">
                 {formatInput(call.input)}
               </pre>
             </Block>
           ) : null}
           {call.output ? (
             <Block label="Output">
-              <pre className="max-h-[280px] overflow-auto whitespace-pre-wrap font-mono text-[11.5px] leading-[1.55] text-zinc-500">
+              <pre className="max-h-[280px] overflow-auto whitespace-pre-wrap font-mono text-[11.5px] leading-[1.55] text-slate-500">
                 {call.output}
               </pre>
             </Block>
@@ -180,7 +180,7 @@ function Dot({ running }: { running: boolean }) {
     <span
       aria-hidden="true"
       className={`absolute left-[-23px] top-[13px] h-[6px] w-[6px] rounded-full ${
-        running ? "animate-pulse bg-zinc-900" : "bg-zinc-300"
+        running ? "animate-pulse bg-slate-900" : "bg-slate-300"
       }`}
     />
   );
@@ -189,7 +189,7 @@ function Dot({ running }: { running: boolean }) {
 function Block({ label, children }: { label: string; children: React.ReactNode }) {
   return (
     <div>
-      <p className="mb-1 font-mono text-[10px] uppercase tracking-[0.09em] text-zinc-300">
+      <p className="mb-1 font-mono text-[10px] uppercase tracking-[0.09em] text-slate-300">
         {label}
       </p>
       {children}

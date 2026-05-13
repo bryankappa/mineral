@@ -1,19 +1,27 @@
 "use client";
 
-import { BookOpen } from "lucide-react";
+import { BookOpen, Boxes } from "lucide-react";
 
 interface MetricCardsProps {
   skillCount: number;
   onOpenSkills: () => void;
+  onOpenSandbox: () => void;
 }
 
-export default function MetricCards({ skillCount, onOpenSkills }: MetricCardsProps) {
+export default function MetricCards({ skillCount, onOpenSkills, onOpenSandbox }: MetricCardsProps) {
   return (
     <div className="mt-4 grid w-full max-w-[610px] grid-cols-3 gap-3">
       <MetricCard
         label="Databricks Cluster Usage"
         value="--"
-        sub="Awaiting telemetry"
+        sub="Spin up an isolated env"
+        onClick={onOpenSandbox}
+        action={
+          <span className="flex items-center gap-1 text-[11.5px] text-slate-500">
+            <Boxes size={12} strokeWidth={2} />
+            <span>Build Sandbox</span>
+          </span>
+        }
       />
 
       <MetricCard
@@ -24,7 +32,7 @@ export default function MetricCards({ skillCount, onOpenSkills }: MetricCardsPro
           <button
             onClick={onOpenSkills}
             aria-label="Browse the skills library"
-            className="flex items-center gap-1 text-[11.5px] text-zinc-500 transition-colors hover:text-zinc-700"
+            className="flex items-center gap-1 text-[11.5px] text-slate-500 transition-colors hover:text-slate-700"
           >
             <BookOpen size={12} strokeWidth={2} />
             <span>Browse Skills</span>
@@ -40,7 +48,7 @@ export default function MetricCards({ skillCount, onOpenSkills }: MetricCardsPro
         value="1"
         sub="You're online"
         badge={
-          <span className="ml-2 inline-flex h-2 w-2 animate-pulse rounded-full bg-green-400" />
+          <span className="ml-2 inline-flex h-2 w-2 animate-pulse rounded-full bg-slate-400" />
         }
         chartTone="green"
       />
@@ -51,9 +59,9 @@ export default function MetricCards({ skillCount, onOpenSkills }: MetricCardsPro
 function Sparkline({ tone }: { tone: "blue" | "green" | "none" }) {
   if (tone === "none") return null;
 
-  const stroke = tone === "blue" ? "#a5b9f8" : "#86c68e";
+  const stroke = "#94a3b8";
   const fillId = `fill-${tone}`;
-  const fillStart = tone === "blue" ? "#c7d6fc" : "#b8e3be";
+  const fillStart = "#cbd5e1";
 
   return (
     <svg
@@ -91,6 +99,7 @@ function MetricCard({
   action,
   badge,
   chartTone = "none",
+  onClick,
 }: {
   label: string;
   value: string;
@@ -98,18 +107,24 @@ function MetricCard({
   action?: React.ReactNode;
   badge?: React.ReactNode;
   chartTone?: "blue" | "green" | "none";
+  onClick?: () => void;
 }) {
   return (
-    <div className="flex min-h-[180px] flex-col overflow-hidden rounded-xl border border-zinc-200 bg-white shadow-[0_1px_4px_rgba(0,0,0,0.05)]">
+    <div
+      onClick={onClick}
+      className={`flex min-h-[180px] flex-col overflow-hidden rounded-xl bg-slate-50 shadow-[inset_0_0_0_1px_rgba(0,0,0,0.025)] ${
+        onClick ? "cursor-pointer transition-colors hover:bg-slate-100/70" : ""
+      }`}
+    >
       <div className="px-4 pt-4">
-        <p className="text-[12px] font-medium leading-snug text-zinc-500">{label}</p>
+        <p className="text-[12px] font-medium leading-snug text-slate-500">{label}</p>
         <div className="mt-2 flex items-center">
-          <p className="text-[26px] font-semibold leading-none tracking-[-0.03em] text-zinc-900">
+          <p className="text-[26px] font-semibold leading-none tracking-[-0.03em] text-slate-900">
             {value}
           </p>
           {badge}
         </div>
-        {sub ? <p className="mt-1.5 text-[11px] text-zinc-400">{sub}</p> : null}
+        {sub ? <p className="mt-1.5 text-[11px] text-slate-400">{sub}</p> : null}
         {action ? <div className="mt-2.5">{action}</div> : null}
       </div>
 
@@ -117,7 +132,7 @@ function MetricCard({
         {chartTone !== "none" ? (
           <Sparkline tone={chartTone} />
         ) : (
-          <div className="absolute inset-x-4 bottom-4 h-px bg-zinc-100" />
+          <div className="absolute inset-x-4 bottom-4 h-px bg-slate-100" />
         )}
       </div>
     </div>

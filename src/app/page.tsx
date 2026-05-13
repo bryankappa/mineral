@@ -5,6 +5,7 @@ import ChatInput from "@/components/ChatInput";
 import MetricCards from "@/components/MetricCards";
 import SessionDetail from "@/components/SessionDetail";
 import Sidebar from "@/components/Sidebar";
+import SandboxBrowser from "@/components/SandboxBrowser";
 import SkillsBrowser from "@/components/SkillsBrowser";
 import { callMineralBackend, fetchSkills } from "@/lib/backend";
 import type { Skill, Task, ToolCall } from "@/lib/backend";
@@ -21,6 +22,7 @@ export default function Home() {
   const [activeSkillIds, setActiveSkillIds] = useState<string[]>([]);
   const [showSkills, setShowSkills] = useState(false);
   const [focusSkillId, setFocusSkillId] = useState<string | null>(null);
+  const [showSandbox, setShowSandbox] = useState(false);
   const [tasks, setTasks] = useState<Task[]>([]);
 
   const selectedSession =
@@ -167,6 +169,7 @@ export default function Home() {
           isThinking={isThinking}
           skillCount={skills.length}
           onOpenSkills={() => handleOpenSkills()}
+          onOpenSandbox={() => setShowSandbox(true)}
         />
       )}
 
@@ -179,6 +182,10 @@ export default function Home() {
           onRunExample={(prompt) => handleSendMessage(prompt)}
         />
       ) : null}
+
+      {showSandbox ? (
+        <SandboxBrowser onClose={() => setShowSandbox(false)} />
+      ) : null}
     </div>
   );
 }
@@ -188,11 +195,13 @@ function HomeView({
   isThinking,
   skillCount,
   onOpenSkills,
+  onOpenSandbox,
 }: {
   onSendMessage: (prompt: string) => void;
   isThinking: boolean;
   skillCount: number;
   onOpenSkills: () => void;
+  onOpenSandbox: () => void;
 }) {
   return (
     <main className="relative flex-1 overflow-hidden bg-white">
@@ -208,14 +217,26 @@ function HomeView({
 
       <div className="relative z-10 flex h-full flex-col items-center justify-center px-10">
         <div className="flex w-full translate-y-3 flex-col items-center">
+          <div className="mb-6 flex flex-col items-center gap-1.5">
+            <h1 className="text-[15px] font-semibold tracking-[-0.02em] text-slate-900">
+              Mineral
+            </h1>
+            <p className="text-[11.5px] text-slate-400">
+              An agent shell for Databricks
+            </p>
+          </div>
           <ChatInput onSubmit={onSendMessage} disabled={isThinking} />
-          <MetricCards skillCount={skillCount} onOpenSkills={onOpenSkills} />
+          <MetricCards
+            skillCount={skillCount}
+            onOpenSkills={onOpenSkills}
+            onOpenSandbox={onOpenSandbox}
+          />
         </div>
       </div>
 
-      <div className="absolute bottom-5 left-1/2 z-10 -translate-x-1/2 rounded-full border border-zinc-200 bg-white px-3.5 py-1.5 text-[11.5px] text-zinc-500 shadow-[0_1px_6px_rgba(0,0,0,0.06)]">
+      <div className="absolute bottom-5 left-1/2 z-10 -translate-x-1/2 rounded-full border border-slate-200 bg-white px-3.5 py-1.5 text-[11.5px] text-slate-500 shadow-[0_1px_6px_rgba(0,0,0,0.06)]">
         <div className="flex items-center gap-1.5">
-          <span className="inline-block h-[6px] w-[6px] animate-pulse rounded-full bg-green-400" />
+          <span className="inline-block h-[6px] w-[6px] animate-pulse rounded-full bg-slate-400" />
           <span>1 agent online</span>
         </div>
       </div>

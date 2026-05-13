@@ -31,9 +31,9 @@ body {
 }
 
 .dot-cluster {
-  background-image: radial-gradient(circle, rgba(148, 182, 255, 0.6) 1.4px, transparent 1.5px);
+  background-image: radial-gradient(circle, rgba(100, 116, 139, 0.5) 1.4px, transparent 1.5px);
   background-size: 11px 11px;
-  opacity: 0.65;
+  opacity: 0.6;
 }
 
 .dot-cluster-left {
