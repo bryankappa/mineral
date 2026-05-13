@@ -1,8 +1,8 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #f4f8fc;
+  --foreground: #102033;
 }
 
 @theme inline {
@@ -18,22 +18,36 @@ body {
 }
 
 body {
-  background: var(--background);
+  background:
+    radial-gradient(circle at top left, rgba(184, 204, 232, 0.4), transparent 28%),
+    linear-gradient(180deg, #fafdff 0%, var(--background) 58%, #eef4fb 100%);
   color: var(--foreground);
   font-family: var(--font-sans), Arial, Helvetica, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
+.home-ambient {
+  background:
+    radial-gradient(circle at top, rgba(180, 205, 236, 0.34) 0%, transparent 40%),
+    linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0.72) 0%,
+      rgba(244, 248, 252, 0.74) 44%,
+      rgba(238, 244, 251, 0.94) 100%
+    );
+}
+
 .dot-pattern {
-  background-image: radial-gradient(circle, #e4e4e7 0.65px, transparent 0.7px);
-  background-size: 20px 20px;
+  background-image: radial-gradient(circle, rgba(87, 111, 145, 0.16) 0.8px, transparent 0.9px);
+  background-size: 22px 22px;
+  opacity: 0.58;
 }
 
 .dot-cluster {
-  background-image: radial-gradient(circle, rgba(100, 116, 139, 0.5) 1.4px, transparent 1.5px);
+  background-image: radial-gradient(circle, rgba(73, 117, 181, 0.2) 1.45px, transparent 1.6px);
   background-size: 11px 11px;
-  opacity: 0.6;
+  opacity: 0.85;
 }
 
 .dot-cluster-left {
@@ -63,11 +77,11 @@ body {
 .shimmer-text {
   background-image: linear-gradient(
     110deg,
-    #9ca3af 0%,
-    #9ca3af 38%,
-    #0f172a 50%,
-    #9ca3af 62%,
-    #9ca3af 100%
+    #768aa6 0%,
+    #768aa6 38%,
+    #1e5dd8 50%,
+    #768aa6 62%,
+    #768aa6 100%
   );
   background-size: 220% 100%;
   background-repeat: no-repeat;
@@ -86,10 +100,10 @@ body {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #d4d4d8;
+  background: #c4d1e0;
   border-radius: 999px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #a1a1aa;
+  background: #8ea3bf;
 }

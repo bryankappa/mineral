@@ -10,7 +10,7 @@ interface TaskPlanProps {
 export default function TaskPlan({ tasks }: TaskPlanProps) {
   if (tasks.length === 0) {
     return (
-      <p className="text-[11.5px] leading-[1.55] text-slate-400">
+      <p className="text-[11.5px] leading-[1.55] text-[#6b7c93]">
         No plan yet. Send a prompt to see the agent&rsquo;s step-by-step plan here.
       </p>
     );
@@ -24,10 +24,10 @@ export default function TaskPlan({ tasks }: TaskPlanProps) {
           <span
             className={`flex-1 text-[12px] leading-[1.45] transition-colors ${
               task.status === "complete"
-                ? "text-slate-400"
+                ? "text-[#8ea1b7]"
                 : task.status === "running"
                 ? "shimmer-text font-medium"
-                : "text-slate-600"
+                : "text-[#31445d]"
             }`}
           >
             {task.title}
@@ -43,7 +43,7 @@ function Checkbox({ status }: { status: Task["status"] }) {
     return (
       <span
         aria-hidden="true"
-        className="mt-[2px] flex h-[14px] w-[14px] flex-shrink-0 items-center justify-center rounded-[3px] bg-slate-900"
+        className="mt-[2px] flex h-[14px] w-[14px] flex-shrink-0 items-center justify-center rounded-[3px] bg-[#1e5dd8]"
       >
         <Check size={10} className="text-white" strokeWidth={3} />
       </span>
@@ -54,9 +54,9 @@ function Checkbox({ status }: { status: Task["status"] }) {
     return (
       <span
         aria-hidden="true"
-        className="mt-[2px] flex h-[14px] w-[14px] flex-shrink-0 items-center justify-center rounded-[3px] border-[1.5px] border-slate-900 bg-white"
+        className="mt-[2px] flex h-[14px] w-[14px] flex-shrink-0 items-center justify-center rounded-[3px] border-[1.5px] border-[#1e5dd8] bg-white"
       >
-        <span className="h-[5px] w-[5px] animate-pulse rounded-full bg-slate-900" />
+        <span className="h-[5px] w-[5px] animate-pulse rounded-full bg-[#1e5dd8]" />
       </span>
     );
   }
@@ -64,7 +64,7 @@ function Checkbox({ status }: { status: Task["status"] }) {
   return (
     <span
       aria-hidden="true"
-      className="mt-[2px] h-[14px] w-[14px] flex-shrink-0 rounded-[3px] border-[1.5px] border-slate-300 bg-white"
+      className="mt-[2px] h-[14px] w-[14px] flex-shrink-0 rounded-[3px] border-[1.5px] border-[#c1d0e0] bg-white"
     />
   );
 }

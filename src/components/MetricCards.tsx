@@ -17,7 +17,7 @@ export default function MetricCards({ skillCount, onOpenSkills, onOpenSandbox }:
         sub="Spin up an isolated env"
         onClick={onOpenSandbox}
         action={
-          <span className="flex items-center gap-1 text-[11.5px] text-slate-500">
+          <span className="flex items-center gap-1 text-[11.5px] text-[#5f738d]">
             <Boxes size={12} strokeWidth={2} />
             <span>Build Sandbox</span>
           </span>
@@ -32,7 +32,7 @@ export default function MetricCards({ skillCount, onOpenSkills, onOpenSandbox }:
           <button
             onClick={onOpenSkills}
             aria-label="Browse the skills library"
-            className="flex items-center gap-1 text-[11.5px] text-slate-500 transition-colors hover:text-slate-700"
+            className="flex items-center gap-1 text-[11.5px] text-[#5f738d] transition-colors hover:text-[#1d2f44]"
           >
             <BookOpen size={12} strokeWidth={2} />
             <span>Browse Skills</span>
@@ -48,7 +48,7 @@ export default function MetricCards({ skillCount, onOpenSkills, onOpenSandbox }:
         value="1"
         sub="You're online"
         badge={
-          <span className="ml-2 inline-flex h-2 w-2 animate-pulse rounded-full bg-slate-400" />
+          <span className="ml-2 inline-flex h-2 w-2 animate-pulse rounded-full bg-[#18775c] shadow-[0_0_0_4px_rgba(24,119,92,0.12)]" />
         }
         chartTone="green"
       />
@@ -59,9 +59,11 @@ export default function MetricCards({ skillCount, onOpenSkills, onOpenSandbox }:
 function Sparkline({ tone }: { tone: "blue" | "green" | "none" }) {
   if (tone === "none") return null;
 
-  const stroke = "#94a3b8";
+  const palette =
+    tone === "green"
+      ? { stroke: "#18775c", fillStart: "#81d3b6" }
+      : { stroke: "#2c66d6", fillStart: "#9ebfff" };
   const fillId = `fill-${tone}`;
-  const fillStart = "#cbd5e1";
 
   return (
     <svg
@@ -72,8 +74,8 @@ function Sparkline({ tone }: { tone: "blue" | "green" | "none" }) {
     >
       <defs>
         <linearGradient id={fillId} x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stopColor={fillStart} stopOpacity="0.55" />
-          <stop offset="100%" stopColor={fillStart} stopOpacity="0.05" />
+          <stop offset="0%" stopColor={palette.fillStart} stopOpacity="0.5" />
+          <stop offset="100%" stopColor={palette.fillStart} stopOpacity="0.02" />
         </linearGradient>
       </defs>
       <path
@@ -83,7 +85,7 @@ function Sparkline({ tone }: { tone: "blue" | "green" | "none" }) {
       <path
         d="M0,38 C8,34 14,22 24,26 C34,30 42,14 54,16 C66,18 76,28 88,22 C100,16 110,20 120,18"
         fill="none"
-        stroke={stroke}
+        stroke={palette.stroke}
         strokeWidth="1.5"
         strokeLinecap="round"
         strokeLinejoin="round"
@@ -112,19 +114,21 @@ function MetricCard({
   return (
     <div
       onClick={onClick}
-      className={`flex min-h-[180px] flex-col overflow-hidden rounded-xl bg-slate-50 shadow-[inset_0_0_0_1px_rgba(0,0,0,0.025)] ${
-        onClick ? "cursor-pointer transition-colors hover:bg-slate-100/70" : ""
+      className={`flex min-h-[180px] flex-col overflow-hidden rounded-[22px] border border-[#d7e1ee] bg-white/82 shadow-[0_14px_34px_rgba(15,23,42,0.06)] backdrop-blur-sm transition-all duration-200 ${
+        onClick
+          ? "cursor-pointer hover:-translate-y-0.5 hover:border-[#bcd0e6] hover:shadow-[0_22px_40px_rgba(15,23,42,0.09)]"
+          : ""
       }`}
     >
       <div className="px-4 pt-4">
-        <p className="text-[12px] font-medium leading-snug text-slate-500">{label}</p>
+        <p className="text-[12px] font-medium leading-snug text-[#5f738d]">{label}</p>
         <div className="mt-2 flex items-center">
-          <p className="text-[26px] font-semibold leading-none tracking-[-0.03em] text-slate-900">
+          <p className="text-[26px] font-semibold leading-none tracking-[-0.03em] text-[#102033]">
             {value}
           </p>
           {badge}
         </div>
-        {sub ? <p className="mt-1.5 text-[11px] text-slate-400">{sub}</p> : null}
+        {sub ? <p className="mt-1.5 text-[11px] text-[#8ea1b7]">{sub}</p> : null}
         {action ? <div className="mt-2.5">{action}</div> : null}
       </div>
 
@@ -132,7 +136,7 @@ function MetricCard({
         {chartTone !== "none" ? (
           <Sparkline tone={chartTone} />
         ) : (
-          <div className="absolute inset-x-4 bottom-4 h-px bg-slate-100" />
+          <div className="absolute inset-x-4 bottom-4 h-px bg-[#dbe4ef]" />
         )}
       </div>
     </div>
