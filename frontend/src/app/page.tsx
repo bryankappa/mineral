@@ -208,11 +208,15 @@ function HomeView({
       <div className="home-ambient absolute inset-0" aria-hidden="true" />
       <div className="dot-pattern absolute inset-0" aria-hidden="true" />
       <div
-        className="dot-cluster dot-cluster-left absolute left-[8%] top-[34%] h-[420px] w-[520px]"
+        className="energy-orbit-field absolute left-1/2 top-[47%] h-[600px] w-[880px] -translate-x-1/2 -translate-y-1/2"
         aria-hidden="true"
       />
       <div
-        className="dot-cluster dot-cluster-right absolute right-[2%] top-[32%] h-[340px] w-[520px]"
+        className="dot-cluster dot-cluster-left absolute left-1/2 top-[50%] h-[300px] w-[390px] -translate-x-[66%] -translate-y-[35%]"
+        aria-hidden="true"
+      />
+      <div
+        className="dot-cluster dot-cluster-right absolute left-1/2 top-[50%] h-[280px] w-[380px] -translate-x-[34%] -translate-y-[34%]"
         aria-hidden="true"
       />
 

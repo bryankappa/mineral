@@ -10,7 +10,7 @@ interface MetricCardsProps {
 
 export default function MetricCards({ skillCount, onOpenSkills, onOpenSandbox }: MetricCardsProps) {
   return (
-    <div className="mt-3 grid w-full max-w-[470px] grid-cols-3 gap-2.5">
+    <div className="mt-3 grid w-full max-w-[470px] grid-cols-3 gap-3">
       <MetricCard
         label="Sandbox capacity"
         value="--"
@@ -114,25 +114,25 @@ function MetricCard({
   return (
     <div
       onClick={onClick}
-      className={`flex min-h-[148px] flex-col overflow-hidden rounded-[5px] border border-[#d9e2ed] bg-[#f7f9fc]/92 shadow-[0_8px_22px_rgba(64,91,124,0.07)] backdrop-blur-sm transition-all duration-200 ${
+      className={`flex min-h-[126px] flex-col overflow-hidden rounded-[16px] border border-[#d7e1ed] bg-white/88 shadow-[0_14px_34px_rgba(31,45,61,0.07),0_1px_4px_rgba(31,45,61,0.04)] backdrop-blur-sm transition-all duration-200 ${
         onClick
-          ? "cursor-pointer hover:-translate-y-px hover:border-[#bfd0e5] hover:bg-white/96"
+          ? "cursor-pointer hover:-translate-y-px hover:border-[#bfcede] hover:bg-white hover:shadow-[0_18px_42px_rgba(31,45,61,0.09)]"
           : ""
       }`}
     >
-      <div className="px-3 pt-3">
+      <div className="px-3 pt-2.5">
         <p className="text-[11.5px] font-medium leading-snug text-[#657891]">{label}</p>
-        <div className="mt-2 flex items-center">
+        <div className="mt-1.5 flex items-center">
           <p className="text-[22px] font-medium leading-none tracking-[-0.03em] text-[#102033]">
             {value}
           </p>
           {badge}
         </div>
-        {sub ? <p className="mt-1.5 text-[11px] text-[#8ea1b7]">{sub}</p> : null}
-        {action ? <div className="mt-2.5">{action}</div> : null}
+        {sub ? <p className="mt-1 text-[11px] text-[#8ea1b7]">{sub}</p> : null}
+        {action ? <div className="mt-1.5">{action}</div> : null}
       </div>
 
-      <div className="relative mt-auto h-[54px] overflow-hidden bg-gradient-to-b from-transparent to-[#f1f5fa]">
+      <div className="relative mt-auto h-[42px] overflow-hidden bg-gradient-to-b from-transparent to-[#f5f8fc]">
         {chartTone !== "none" ? (
           <Sparkline tone={chartTone} />
         ) : (

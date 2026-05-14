@@ -39,25 +39,72 @@ body {
 }
 
 .dot-pattern {
-  background-image: radial-gradient(circle, rgba(87, 111, 145, 0.16) 0.8px, transparent 0.9px);
+  background-image: radial-gradient(circle, rgba(74, 101, 138, 0.22) 0.8px, transparent 0.9px);
   background-size: 22px 22px;
-  opacity: 0.58;
+  opacity: 0.42;
+}
+
+.energy-orbit-field {
+  pointer-events: none;
+}
+
+.energy-orbit-field::before {
+  position: absolute;
+  inset: 0;
+  content: "";
+  background-image:
+    radial-gradient(circle, rgba(24, 85, 210, 0.8) 1.2px, transparent 1.55px),
+    radial-gradient(circle, rgba(30, 145, 116, 0.58) 1px, transparent 1.3px),
+    radial-gradient(circle, rgba(84, 127, 238, 0.62) 0.75px, transparent 1.05px);
+  background-position:
+    0 0,
+    12px 8px,
+    6px 14px;
+  background-size:
+    20px 20px,
+    28px 28px,
+    34px 34px;
+  -webkit-mask-image:
+    radial-gradient(ellipse at 50% 50%, transparent 0%, #000 24%, #000 38%, transparent 58%);
+  mask-image:
+    radial-gradient(ellipse at 50% 50%, transparent 0%, #000 24%, #000 38%, transparent 58%);
+  opacity: 0.32;
+  transform-origin: center;
+  will-change: transform;
+  animation: energy-orbit 42s linear infinite;
+}
+
+@keyframes energy-orbit {
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .energy-orbit-field::before,
+  .dot-cluster {
+    animation: none;
+  }
+
+  .energy-orbit-field::before {
+    opacity: 0.16;
+  }
 }
 
 .dot-cluster {
   background-image: radial-gradient(circle, rgba(73, 117, 181, 0.2) 1.45px, transparent 1.6px);
   background-size: 11px 11px;
-  opacity: 0.85;
+  opacity: 0.16;
 }
 
 .dot-cluster-left {
-  -webkit-mask-image: radial-gradient(circle at center, #000 0%, #000 26%, transparent 70%);
-  mask-image: radial-gradient(circle at center, #000 0%, #000 26%, transparent 70%);
+  -webkit-mask-image: radial-gradient(circle at center, transparent 0%, #000 28%, #000 42%, transparent 70%);
+  mask-image: radial-gradient(circle at center, transparent 0%, #000 28%, #000 42%, transparent 70%);
 }
 
 .dot-cluster-right {
-  -webkit-mask-image: radial-gradient(circle at center, #000 0%, #000 22%, transparent 72%);
-  mask-image: radial-gradient(circle at center, #000 0%, #000 22%, transparent 72%);
+  -webkit-mask-image: radial-gradient(circle at center, transparent 0%, #000 26%, #000 40%, transparent 72%);
+  mask-image: radial-gradient(circle at center, transparent 0%, #000 26%, #000 40%, transparent 72%);
 }
 
 /* ──────────────────────────────────────────────────────────────────────────
