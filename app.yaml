@@ -1,4 +1,4 @@
-command: ["bash", "start.sh"]
+command: ["bash", "frontend/start.sh"]
 
 env:
   # ── Deployment ────────────────────────────────────────────────────────────

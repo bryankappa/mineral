@@ -7,6 +7,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ## Commands
 
 ```bash
+cd frontend
 npm run dev       # Start dev server at http://localhost:3000
 npm run build     # Production build
 npm run lint      # Run ESLint
@@ -20,11 +21,11 @@ No test runner is configured.
 
 ### Integration point
 
-`src/lib/backend.ts` — `callMineralBackend(prompt)` is the **only** function that talks to the backend. It currently returns mock data. Replace it with your Databricks MLflow Responses Agent call when the endpoint is ready. The `ToolCall` type it exports is used throughout the UI.
+`frontend/src/lib/backend.ts` — `callMineralBackend(prompt)` is the **only** function that talks to the backend. It currently returns mock data. Replace it with your Databricks MLflow Responses Agent call when the endpoint is ready. The `ToolCall` type it exports is used throughout the UI.
 
 ### Page & state
 
-`src/app/page.tsx` is the only route. It holds all app state (`sessions`, `selectedSessionId`, `isThinking`, `toolCalls`, `responseMessage`) and passes them down as props. There is no global state library.
+`frontend/src/app/page.tsx` is the only route. It holds all app state (`sessions`, `selectedSessionId`, `isThinking`, `toolCalls`, `responseMessage`) and passes them down as props. There is no global state library.
 
 Two views render inside the main area:
 - **HomeView** — shown when no session is selected; renders `ChatInput` + `MetricCards` over a decorative dot-pattern background.
@@ -43,14 +44,14 @@ Two views render inside the main area:
 
 ### Styling
 
-Tailwind CSS v4 via PostCSS. No component library — all styling is inline Tailwind classes. Custom dot-pattern and dot-cluster CSS is in `src/app/globals.css`. Fonts: Geist Sans + Geist Mono (via `next/font/google`).
+Tailwind CSS v4 via PostCSS. No component library — all styling is inline Tailwind classes. Custom dot-pattern and dot-cluster CSS is in `frontend/src/app/globals.css`. Fonts: Geist Sans + Geist Mono (via `next/font/google`).
 
 ### Key types
 
 ```ts
-// src/lib/types.ts
+// frontend/src/lib/types.ts
 Session { id, title, subtitle, age, active }
 
-// src/lib/backend.ts
+// frontend/src/lib/backend.ts
 ToolCall { id, toolName, input, output, durationMs }
 ```

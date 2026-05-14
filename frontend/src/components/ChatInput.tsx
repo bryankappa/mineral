@@ -20,7 +20,7 @@ const getServerHydratedSnapshot = () => false;
 export default function ChatInput({
   onSubmit,
   disabled,
-  maxWidthClass = "max-w-[560px]",
+  maxWidthClass = "max-w-[470px]",
 }: ChatInputProps) {
   const [value, setValue] = useState("");
   const [mode, setMode] = useState<AgentMode>("build");
@@ -41,10 +41,10 @@ export default function ChatInput({
   return (
     <div className={`w-full ${maxWidthClass}`}>
       <div
-        className={`overflow-hidden rounded-[5px] border bg-white/90 shadow-[0_12px_30px_rgba(64,91,124,0.08)] backdrop-blur-sm transition-all duration-200 ${
+        className={`overflow-hidden rounded-[5px] border bg-white/92 shadow-[0_8px_22px_rgba(64,91,124,0.07)] backdrop-blur-sm transition-all duration-200 ${
           disabled
             ? "border-[#dce5f0] opacity-65"
-            : "border-[#d7e1ee] hover:border-[#bfd0e5] focus-within:border-[#5a82f0] focus-within:shadow-[0_0_0_1px_rgba(90,130,240,0.22),0_14px_34px_rgba(64,91,124,0.1)]"
+            : "border-[#d7e1ee] hover:border-[#bfd0e5] focus-within:border-[#7da0f6] focus-within:shadow-[0_0_0_1px_rgba(90,130,240,0.18),0_10px_26px_rgba(64,91,124,0.08)]"
         }`}
       >
         <textarea
@@ -60,13 +60,13 @@ export default function ChatInput({
           placeholder="Ask or build anything"
           disabled={disabled}
           aria-label="Message input"
-          className="min-h-[76px] w-full resize-none bg-transparent px-3.5 pt-3.5 pb-1.5 text-[13px] leading-6 text-[#31445d] placeholder:text-[#91a0b3] focus:outline-none disabled:opacity-50"
+          className="min-h-[58px] w-full resize-none bg-transparent px-3 pt-3 pb-1 text-[12.5px] leading-5 text-[#31445d] placeholder:text-[#91a0b3] focus:outline-none disabled:opacity-50"
         />
 
-        <div className="flex items-center justify-between px-3.5 pb-2.5">
+        <div className="flex items-center justify-between px-3 pb-2">
           <button
             aria-label="Select model"
-            className="flex items-center gap-1.5 rounded-[4px] px-1.5 py-1 text-[12px] transition-colors hover:bg-[#eef4fb]"
+            className="flex items-center gap-1.5 rounded-[4px] px-1.5 py-0.5 text-[12px] transition-colors hover:bg-[#eef4fb]"
           >
             <Image
               src={logo}
@@ -107,7 +107,7 @@ export default function ChatInput({
           </div>
         </div>
 
-        <div className="flex items-center justify-between border-t border-[#dce5f0] bg-[#edf3fb]/72 px-3.5 py-1.5 text-[10.5px]">
+        <div className="flex items-center justify-between border-t border-[#dce5f0] bg-[#f3f7fc] px-3 py-1.5 text-[10.5px]">
           <span className="px-1 font-mono text-[#7e91a9]">quantai</span>
           <div
             role="tablist"

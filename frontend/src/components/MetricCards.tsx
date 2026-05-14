@@ -10,7 +10,7 @@ interface MetricCardsProps {
 
 export default function MetricCards({ skillCount, onOpenSkills, onOpenSandbox }: MetricCardsProps) {
   return (
-    <div className="mt-3 grid w-full max-w-[560px] grid-cols-3 gap-3">
+    <div className="mt-3 grid w-full max-w-[470px] grid-cols-3 gap-2.5">
       <MetricCard
         label="Sandbox capacity"
         value="--"
@@ -114,16 +114,16 @@ function MetricCard({
   return (
     <div
       onClick={onClick}
-      className={`flex min-h-[150px] flex-col overflow-hidden rounded-[5px] border border-[#d7e1ee] bg-white/84 shadow-[0_10px_26px_rgba(64,91,124,0.08)] backdrop-blur-sm transition-all duration-200 ${
+      className={`flex min-h-[148px] flex-col overflow-hidden rounded-[5px] border border-[#d9e2ed] bg-[#f7f9fc]/92 shadow-[0_8px_22px_rgba(64,91,124,0.07)] backdrop-blur-sm transition-all duration-200 ${
         onClick
-          ? "cursor-pointer hover:-translate-y-px hover:border-[#bfd0e5] hover:bg-white"
+          ? "cursor-pointer hover:-translate-y-px hover:border-[#bfd0e5] hover:bg-white/96"
           : ""
       }`}
     >
-      <div className="px-3.5 pt-3.5">
-        <p className="text-[12px] font-medium leading-snug text-[#5f738d]">{label}</p>
+      <div className="px-3 pt-3">
+        <p className="text-[11.5px] font-medium leading-snug text-[#657891]">{label}</p>
         <div className="mt-2 flex items-center">
-          <p className="text-[24px] font-medium leading-none tracking-[-0.04em] text-[#102033]">
+          <p className="text-[22px] font-medium leading-none tracking-[-0.03em] text-[#102033]">
             {value}
           </p>
           {badge}
@@ -132,7 +132,7 @@ function MetricCard({
         {action ? <div className="mt-2.5">{action}</div> : null}
       </div>
 
-      <div className="relative mt-auto h-[58px] overflow-hidden">
+      <div className="relative mt-auto h-[54px] overflow-hidden bg-gradient-to-b from-transparent to-[#f1f5fa]">
         {chartTone !== "none" ? (
           <Sparkline tone={chartTone} />
         ) : (
